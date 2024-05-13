@@ -27,6 +27,7 @@
     "langchain": "^0.0.202",
     "pdf-lib": "^1.17.1",
     "pdf-parse": "^1.1.1",
+    "underscore": "^1.13.6",
     "zod": "^3.22.4"
   },
   "devDependencies": {
