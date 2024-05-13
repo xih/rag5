@@ -46,18 +46,13 @@ export default function Home() {
     },
   });
 
-  console.log("is loading", isLoading);
-
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof paperSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(isLoading, "is Loading");
-    console.log(values);
     setIsLoading(true);
     await delayHalfSecond();
     setIsLoading(false);
-    console.log(isLoading, "is Loading");
   }
 
   return (
