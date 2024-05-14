@@ -22,11 +22,15 @@
   "license": "MIT",
   "dependencies": {
     "@supabase/supabase-js": "^2.38.4",
+    "@types/sqlite3": "^3.1.11",
     "axios": "^1.6.1",
+    "csv-parser": "^3.0.0",
     "express": "^4.18.2",
     "langchain": "^0.0.202",
     "pdf-lib": "^1.17.1",
     "pdf-parse": "^1.1.1",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
     "underscore": "^1.13.6",
     "zod": "^3.22.4"
   },

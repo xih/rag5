@@ -11,6 +11,9 @@
 // 9. [TODO]: getNames
 // 10. [TODO]: store the assessor-historical-secured-property-tax-rolls into a database and load the missing ones
 // 11. [TODO]: write to sqlite database, then write to supabase database
+// 5-14-2024
+// 12. https://gist.github.com/blakeembrey/a848f0ab00018ea6b8be1679b73da927 [blake's gist]
+// 13. load assesor_historical_secured_into sqlite
 
 import z from "zod";
 import { blockLotSearchResultsSchema } from "../schemas/blockLotSchema";

@@ -4,3 +4,9 @@ dist
 .env.development.local
 pdfs/**
 src/generated/**
+
+data
+
+
+*.db
+*.sqlite
