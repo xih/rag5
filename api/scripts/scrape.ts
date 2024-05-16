@@ -13,11 +13,17 @@
 // 11. [TODO]: write to sqlite database, then write to supabase database
 // 5-14-2024
 // 12. https://gist.github.com/blakeembrey/a848f0ab00018ea6b8be1679b73da927 [blake's gist]
-// 13. load assesor_historical_secured_into sqlite
+// 13. load assesor_historical_secured_into sqlite [done] 3,000,000 rows
+// 5-16-2024
+// 14. create a table for scraped output
+// 15. write the json to a file, then ask chatGPT the best way to store this in SQL
+// 16. for MVP just store "SearchResults" array into the database first
 
 import z from "zod";
 import { blockLotSearchResultsSchema } from "../schemas/blockLotSchema";
 import _ from "underscore";
+// import writeJSONtoFile from "fs/promises";
+import { writeFile } from "fs/promises";
 
 const userAgent = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36`;
 const cookie = `googtrans=/en/en; BIGipServerASR-102_recorder.sfgov.org_PRD_EXT_pool=2160622032.20480.0000; HideDetails=0`;
@@ -142,10 +148,23 @@ async function getOneBlockLot(
   };
 }
 
+async function writeJSONtoFileFunc(data) {
+  console.log(data);
+  try {
+    writeFile("output.json", JSON.stringify(data, null, 2));
+    console.log("JSON data has been written to output.json");
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 async function main() {
   const key = await getSecureKey();
   const result = await getOneBlockLot({ block: "0001", lot: "001" }, key);
+
+  writeJSONtoFileFunc(result);
   console.log(result?.latestResult);
+  console.log(result);
 }
 
 main();

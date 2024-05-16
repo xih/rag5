@@ -1,0 +1,1552 @@
+{
+  "latestResult": {
+    "firstResult": {
+      "ID": "11068553",
+      "PrimaryDocNumber": "2024038302",
+      "DocumentDate": "5/13/2024",
+      "FilingCode": "EASEMENT",
+      "Names": "(R) 3654 BALBOA STREET LLC<br/>(E) LOW DAISY W",
+      "SecondaryDocNumber": "0",
+      "BookType": "",
+      "BookNumber": "",
+      "NumberOfPages": "0"
+    }
+  },
+  "ResultCount": 7013086,
+  "SearchResults": [
+    {
+      "ID": "11068553",
+      "PrimaryDocNumber": "2024038302",
+      "DocumentDate": "5/13/2024",
+      "FilingCode": "EASEMENT",
+      "Names": "(R) 3654 BALBOA STREET LLC<br/>(E) LOW DAISY W",
+      "SecondaryDocNumber": "0",
+      "BookType": "",
+      "BookNumber": "",
+      "NumberOfPages": "0"
+    },
+    {
+      "ID": "11068552",
+      "PrimaryDocNumber": "2024038301",
+      "DocumentDate": "5/13/2024",
+      "FilingCode": "SUBDNTN AGREEMENT",
+      "Names": "(R) 3654 BALBOA STREET LLC<br/>(E) CAPITAL ACCESS GROUP INC",
+      "SecondaryDocNumber": "0",
+      "BookType": "",
+      "BookNumber": "",
+      "NumberOfPages": "0"
+    },
+    {
+      "ID": "11068551",
+      "PrimaryDocNumber": "2024038300",
+      "DocumentDate": "5/13/2024",
+      "FilingCode": "REQUEST FOR NTC",
+      "Names": "(R) 3654 BALBOA STREET LLC<br/>(E) CAPITAL ACCESS GROUP INC",
+      "SecondaryDocNumber": "0",
+      "BookType": "",
+      "BookNumber": "",
+      "NumberOfPages": "0"
+    },
+    {
+      "ID": "11068550",
+      "PrimaryDocNumber": "2024038299",
+      "DocumentDate": "5/13/2024",
+      "FilingCode": "LEASE",
+      "Names": "(R) 3654 BALBOA STREET LLC<br/>(E) THOMAS D LI INSURANCE AGENCY LLC",
+      "SecondaryDocNumber": "0",
+      "BookType": "",
+      "BookNumber": "",
+      "NumberOfPages": "0"
+    },
+    {
+      "ID": "11068549",
+      "PrimaryDocNumber": "2024038298",
+      "DocumentDate": "5/13/2024",
+      "FilingCode": "ASGT RENTS/LEASES",
+      "Names": "(R) 3654 BALBOA STREET LLC<br/>(E) CAPITAL ACCESS GROUP INC",
+      "SecondaryDocNumber": "0",
+      "BookType": "",
+      "BookNumber": "",
+      "NumberOfPages": "0"
+    },
+    {
+      "ID": "11068548",
+      "PrimaryDocNumber": "2024038297",
+      "DocumentDate": "5/13/2024",
+      "FilingCode": "ASSGN DEED OF TRUST",
+      "Names": "(R) 3654 BALBOA STREET LLC<br/>(E) U S SMALL BUSINESS ADMINISTRATION",
+      "SecondaryDocNumber": "0",
+      "BookType": "",
+      "BookNumber": "",
+      "NumberOfPages": "0"
+    },
+    {
+      "ID": "11068547",
+      "PrimaryDocNumber": "2024038296",
+      "DocumentDate": "5/13/2024",
+      "FilingCode": "DEED OF TRUST<br/>ASGT RENTS/LEASES<br/>NTC SECURITY AGRMNT",
+      "Names": "(R) 3654 BALBOA STREET LLC<br/>(E) CAPITAL ACCESS GROUP INC",
+      "SecondaryDocNumber": "0",
+      "BookType": "",
+      "BookNumber": "",
+      "NumberOfPages": "0"
+    },
+    {
+      "ID": "11068546",
+      "PrimaryDocNumber": "2024038295",
+      "DocumentDate": "5/13/2024",
+      "FilingCode": "SUBDNTN AGREEMENT",
+      "Names": "(R) 3654 BALBOA STREET LLC<br/>(E) HERITAGE BANK OF COMMERCE",
+      "SecondaryDocNumber": "0",
+      "BookType": "",
+      "BookNumber": "",
+      "NumberOfPages": "0"
+    },
+    {
+      "ID": "11068545",
+      "PrimaryDocNumber": "2024038294",
+      "DocumentDate": "5/13/2024",
+      "FilingCode": "ASGT RENTS/LEASES",
+      "Names": "(R) 3654 BALBOA STREET LLC<br/>(E) HERITAGE BANK OF COMMERCE",
+      "SecondaryDocNumber": "0",
+      "BookType": "",
+      "BookNumber": "",
+      "NumberOfPages": "0"
+    },
+    {
+      "ID": "11068544",
+      "PrimaryDocNumber": "2024038293",
+      "DocumentDate": "5/13/2024",
+      "FilingCode": "DEED OF TRUST",
+      "Names": "(R) 3654 BALBOA STREET LLC<br/>(E) HERITAGE BANK OF COMMERCE",
+      "SecondaryDocNumber": "0",
+      "BookType": "",
+      "BookNumber": "",
+      "NumberOfPages": "0"
+    }
+  ],
+  "RefinementPanelData": {
+    "Years": [
+      {
+        "Key": "1990",
+        "Value": 360135,
+        "ID": "1990",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2003",
+        "Value": 300178,
+        "ID": "2003",
+        "RefinementToken": null
+      },
+      {
+        "Key": "1993",
+        "Value": 254596,
+        "ID": "1993",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2004",
+        "Value": 252678,
+        "ID": "2004",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2012",
+        "Value": 246933,
+        "ID": "2012",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2002",
+        "Value": 246789,
+        "ID": "2002",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2013",
+        "Value": 239900,
+        "ID": "2013",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2005",
+        "Value": 222191,
+        "ID": "2005",
+        "RefinementToken": null
+      },
+      {
+        "Key": "1999",
+        "Value": 219203,
+        "ID": "1999",
+        "RefinementToken": null
+      },
+      {
+        "Key": "1992",
+        "Value": 217807,
+        "ID": "1992",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2011",
+        "Value": 216743,
+        "ID": "2011",
+        "RefinementToken": null
+      },
+      {
+        "Key": "1994",
+        "Value": 214612,
+        "ID": "1994",
+        "RefinementToken": null
+      },
+      {
+        "Key": "1998",
+        "Value": 214279,
+        "ID": "1998",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2010",
+        "Value": 210970,
+        "ID": "2010",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2016",
+        "Value": 207015,
+        "ID": "2016",
+        "RefinementToken": null
+      },
+      {
+        "Key": "1991",
+        "Value": 206676,
+        "ID": "1991",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2007",
+        "Value": 206674,
+        "ID": "2007",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2006",
+        "Value": 198401,
+        "ID": "2006",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2001",
+        "Value": 196865,
+        "ID": "2001",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2009",
+        "Value": 196396,
+        "ID": "2009",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2021",
+        "Value": 191441,
+        "ID": "2021",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2008",
+        "Value": 190176,
+        "ID": "2008",
+        "RefinementToken": null
+      },
+      {
+        "Key": "1996",
+        "Value": 188601,
+        "ID": "1996",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2014",
+        "Value": 185729,
+        "ID": "2014",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2015",
+        "Value": 183049,
+        "ID": "2015",
+        "RefinementToken": null
+      },
+      {
+        "Key": "1997",
+        "Value": 182171,
+        "ID": "1997",
+        "RefinementToken": null
+      },
+      {
+        "Key": "1995",
+        "Value": 172926,
+        "ID": "1995",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2017",
+        "Value": 172736,
+        "ID": "2017",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2000",
+        "Value": 171181,
+        "ID": "2000",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2019",
+        "Value": 167489,
+        "ID": "2019",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2020",
+        "Value": 164912,
+        "ID": "2020",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2018",
+        "Value": 154846,
+        "ID": "2018",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2022",
+        "Value": 115399,
+        "ID": "2022",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2023",
+        "Value": 104737,
+        "ID": "2023",
+        "RefinementToken": null
+      },
+      {
+        "Key": "2024",
+        "Value": 38302,
+        "ID": "2024",
+        "RefinementToken": null
+      },
+      {
+        "Key": "1989",
+        "Value": 350,
+        "ID": "1989",
+        "RefinementToken": null
+      }
+    ],
+    "FilingCodes": [
+      {
+        "Key": "DEED OF TRUST",
+        "Value": 1080063,
+        "ID": "002",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RECONVEYANCE",
+        "Value": 1068081,
+        "ID": "005",
+        "RefinementToken": null
+      },
+      {
+        "Key": "DEED",
+        "Value": 898808,
+        "ID": "001",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC LIEN",
+        "Value": 754449,
+        "ID": "024",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SUBSTITUTION TRUSTEE",
+        "Value": 656446,
+        "ID": "014",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RELEASE OF LIEN",
+        "Value": 631376,
+        "ID": "019",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC TAX LIEN",
+        "Value": 325832,
+        "ID": "191",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RELEASE OF TAX LIEN",
+        "Value": 263696,
+        "ID": "012",
+        "RefinementToken": null
+      },
+      {
+        "Key": "ASSGN DEED OF TRUST",
+        "Value": 230541,
+        "ID": "004",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC SPECIAL TAX LIEN",
+        "Value": 168135,
+        "ID": "229",
+        "RefinementToken": null
+      },
+      {
+        "Key": "ABSTRACT OF JUDGMENT",
+        "Value": 141001,
+        "ID": "020",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RES ENERGY INSPCTN",
+        "Value": 134717,
+        "ID": "046",
+        "RefinementToken": null
+      },
+      {
+        "Key": "ASGT RENTS/LEASES",
+        "Value": 125876,
+        "ID": "053",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC FED TAX LIEN",
+        "Value": 75377,
+        "ID": "011",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SUBDNTN AGREEMENT",
+        "Value": 74195,
+        "ID": "152",
+        "RefinementToken": null
+      },
+      {
+        "Key": "AFFIDAVIT OF DEATH",
+        "Value": 69673,
+        "ID": "018",
+        "RefinementToken": null
+      },
+      {
+        "Key": "ABSTRCT SUPPORT JDGMNT",
+        "Value": 67454,
+        "ID": "241",
+        "RefinementToken": null
+      },
+      {
+        "Key": "REQUEST FOR NTC",
+        "Value": 51045,
+        "ID": "008",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NOTARY BOND",
+        "Value": 47748,
+        "ID": "028",
+        "RefinementToken": null
+      },
+      {
+        "Key": "POWER ATTORNEY",
+        "Value": 46078,
+        "ID": "138",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC OF DEFAULT",
+        "Value": 35780,
+        "ID": "007",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC SECURITY AGRMNT",
+        "Value": 35580,
+        "ID": "124",
+        "RefinementToken": null
+      },
+      {
+        "Key": "MODIF DEED OF TRUST",
+        "Value": 32688,
+        "ID": "026",
+        "RefinementToken": null
+      },
+      {
+        "Key": "FIXTURE FILING",
+        "Value": 31045,
+        "ID": "226",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SATISFACTION JUDGMENT",
+        "Value": 27531,
+        "ID": "204",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CNCL LIEN FILED IN ERROR",
+        "Value": 25430,
+        "ID": "397",
+        "RefinementToken": null
+      },
+      {
+        "Key": "UCC-1",
+        "Value": 24889,
+        "ID": "220",
+        "RefinementToken": null
+      },
+      {
+        "Key": "MECHANIC'S LIEN",
+        "Value": 24719,
+        "ID": "023",
+        "RefinementToken": null
+      },
+      {
+        "Key": "AGREEMENT",
+        "Value": 21502,
+        "ID": "013",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC OF TRUSTEE SALE",
+        "Value": 20792,
+        "ID": "219",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RESCISSION NTC DEFAULT",
+        "Value": 20777,
+        "ID": "009",
+        "RefinementToken": null
+      },
+      {
+        "Key": "DECLARATION OF CC&R",
+        "Value": 18797,
+        "ID": "081",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NOTCE ABC TRF",
+        "Value": 18732,
+        "ID": "209",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC COMPLETION",
+        "Value": 17938,
+        "ID": "015",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC DECISION",
+        "Value": 15641,
+        "ID": "125",
+        "RefinementToken": null
+      },
+      {
+        "Key": "DECLTN USE LIMITATION",
+        "Value": 15554,
+        "ID": "398",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CERTIFICATION OF TRUST",
+        "Value": 13831,
+        "ID": "413",
+        "RefinementToken": null
+      },
+      {
+        "Key": "PARTIAL RECONVEYANCE",
+        "Value": 13640,
+        "ID": "006",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RELEASE JUDGMENT",
+        "Value": 13157,
+        "ID": "148",
+        "RefinementToken": null
+      },
+      {
+        "Key": "AFFIDAVIT CHANGE TTEE",
+        "Value": 12293,
+        "ID": "457",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC SPECIAL RESTRICTIONS",
+        "Value": 12242,
+        "ID": "394",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC NONRESPONSIBILITY",
+        "Value": 12000,
+        "ID": "120",
+        "RefinementToken": null
+      },
+      {
+        "Key": "ASSIGNMENT",
+        "Value": 11947,
+        "ID": "025",
+        "RefinementToken": null
+      },
+      {
+        "Key": "ORDER",
+        "Value": 11618,
+        "ID": "171",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC CRDTR BULK SALE",
+        "Value": 11607,
+        "ID": "029",
+        "RefinementToken": null
+      },
+      {
+        "Key": "ORDER OF ABATEMENT",
+        "Value": 10275,
+        "ID": "339",
+        "RefinementToken": null
+      },
+      {
+        "Key": "REVOC ORDER ABATEMENT",
+        "Value": 9933,
+        "ID": "396",
+        "RefinementToken": null
+      },
+      {
+        "Key": "TRUSTEE'S DEED",
+        "Value": 9808,
+        "ID": "010",
+        "RefinementToken": null
+      },
+      {
+        "Key": "UCC - 3 TERMINATION",
+        "Value": 9553,
+        "ID": "225",
+        "RefinementToken": null
+      },
+      {
+        "Key": "ASSIGNMENT OF LEASE",
+        "Value": 9457,
+        "ID": "099",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CONDOMINIUM PLAN",
+        "Value": 9407,
+        "ID": "216",
+        "RefinementToken": null
+      },
+      {
+        "Key": "PENDENCY ACTION",
+        "Value": 8882,
+        "ID": "030",
+        "RefinementToken": null
+      },
+      {
+        "Key": "DECREE DISTRBTN FINAL",
+        "Value": 8379,
+        "ID": "034",
+        "RefinementToken": null
+      },
+      {
+        "Key": "JUDGMENT",
+        "Value": 8024,
+        "ID": "096",
+        "RefinementToken": null
+      },
+      {
+        "Key": "LEASE",
+        "Value": 7738,
+        "ID": "097",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RELEASE LIS PENDENS",
+        "Value": 7548,
+        "ID": "149",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC CNSTRNTS PROPERTY",
+        "Value": 7307,
+        "ID": "233",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC LIEN RLSD IN ERROR",
+        "Value": 7103,
+        "ID": "500",
+        "RefinementToken": null
+      },
+      {
+        "Key": "DECLARATION",
+        "Value": 7038,
+        "ID": "078",
+        "RefinementToken": null
+      },
+      {
+        "Key": "DECLARTN HOMESTEAD",
+        "Value": 6883,
+        "ID": "017",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC ASSESSMENT LIEN-CONTRACTUAL",
+        "Value": 6709,
+        "ID": "111",
+        "RefinementToken": null
+      },
+      {
+        "Key": "OPTION/RIGHT REFUSE",
+        "Value": 6466,
+        "ID": "128",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NOTICE",
+        "Value": 6271,
+        "ID": "110",
+        "RefinementToken": null
+      },
+      {
+        "Key": "DECLARATION OF TRUST",
+        "Value": 6085,
+        "ID": "082",
+        "RefinementToken": null
+      },
+      {
+        "Key": "AFFIDAVIT - Non-Term POA",
+        "Value": 5801,
+        "ID": "049",
+        "RefinementToken": null
+      },
+      {
+        "Key": "UCC - 3 CONTINUATION",
+        "Value": 5285,
+        "ID": "223",
+        "RefinementToken": null
+      },
+      {
+        "Key": "LETTERS TESTAMENTARY",
+        "Value": 5088,
+        "ID": "200",
+        "RefinementToken": null
+      },
+      {
+        "Key": "ORDER CONFIRMING SALE",
+        "Value": 4113,
+        "ID": "218",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SUBORDINATED DEED OF TRUST",
+        "Value": 4062,
+        "ID": "027",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CTF OF PARTNERSHIP",
+        "Value": 4048,
+        "ID": "135",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CONSTRN DEED OF TRUST",
+        "Value": 3854,
+        "ID": "075",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RELEASE ASSIGN RENTS",
+        "Value": 3348,
+        "ID": "144",
+        "RefinementToken": null
+      },
+      {
+        "Key": "ASGN  ASGN RENTS/LEASES",
+        "Value": 3339,
+        "ID": "464",
+        "RefinementToken": null
+      },
+      {
+        "Key": "AMEND CC&Rs",
+        "Value": 3251,
+        "ID": "108",
+        "RefinementToken": null
+      },
+      {
+        "Key": "EASEMENT",
+        "Value": 3220,
+        "ID": "087",
+        "RefinementToken": null
+      },
+      {
+        "Key": "LETTERS ADMINISTRATION",
+        "Value": 3100,
+        "ID": "197",
+        "RefinementToken": null
+      },
+      {
+        "Key": "UCC - 3 AMENDMENT",
+        "Value": 3038,
+        "ID": "221",
+        "RefinementToken": null
+      },
+      {
+        "Key": "TOD",
+        "Value": 2916,
+        "ID": "506",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC POWER SELL TAX DFLTD",
+        "Value": 2841,
+        "ID": "417",
+        "RefinementToken": null
+      },
+      {
+        "Key": "LTRS CONSERVATORSHIP",
+        "Value": 2726,
+        "ID": "198",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CANCEL/RELEASE LEASE",
+        "Value": 2533,
+        "ID": "061",
+        "RefinementToken": null
+      },
+      {
+        "Key": "UCC - 3 ASSIGNMENT ",
+        "Value": 2494,
+        "ID": "222",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RELEASE OF NOTICE OF ASSESSMENT LIEN (HOA)",
+        "Value": 2479,
+        "ID": "248",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC SOLAR ENERGY CONTRACT",
+        "Value": 2339,
+        "ID": "100",
+        "RefinementToken": null
+      },
+      {
+        "Key": "ABANDON HOMESTEAD",
+        "Value": 2218,
+        "ID": "047",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CERT RELEASE- FED TAX LIEN",
+        "Value": 2128,
+        "ID": "069",
+        "RefinementToken": null
+      },
+      {
+        "Key": "BOND RLSE MEC LIEN",
+        "Value": 2105,
+        "ID": "239",
+        "RefinementToken": null
+      },
+      {
+        "Key": "ASGN SECURITY AGRMNT",
+        "Value": 2052,
+        "ID": "462",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CONDOMINIUM MAP",
+        "Value": 1895,
+        "ID": "206",
+        "RefinementToken": null
+      },
+      {
+        "Key": "Number not used",
+        "Value": 1772,
+        "ID": "165",
+        "RefinementToken": null
+      },
+      {
+        "Key": "ASGN OF FIXTURE FILING",
+        "Value": 1738,
+        "ID": "463",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RELEASE MECH LIEN",
+        "Value": 1660,
+        "ID": "033",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RENEWAL OF JUDGMNT",
+        "Value": 1658,
+        "ID": "269",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC WTHDWL RENTAL UNIT",
+        "Value": 1586,
+        "ID": "406",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RESC NTC PWR SELL DFLT",
+        "Value": 1556,
+        "ID": "418",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RECORD SURVEY MAP",
+        "Value": 1501,
+        "ID": "208",
+        "RefinementToken": null
+      },
+      {
+        "Key": "PARCEL MAP",
+        "Value": 1453,
+        "ID": "207",
+        "RefinementToken": null
+      },
+      {
+        "Key": "BOND - Process/Photo/Legal",
+        "Value": 1422,
+        "ID": "016",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RELEASE MORTGAGE",
+        "Value": 1383,
+        "ID": "150",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NTC COMPLIANCE",
+        "Value": 1263,
+        "ID": "117",
+        "RefinementToken": null
+      }
+    ],
+    "Names": [
+      {
+        "Key": "SFPH",
+        "Value": 521239,
+        "ID": "SFPH",
+        "RefinementToken": null
+      },
+      {
+        "Key": "MERS INC",
+        "Value": 368865,
+        "ID": "MERS INC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SFWD",
+        "Value": 304157,
+        "ID": "SFWD",
+        "RefinementToken": null
+      },
+      {
+        "Key": "WELLS FARGO BANK NA",
+        "Value": 237102,
+        "ID": "WELLS FARGO BANK NA",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SFTC",
+        "Value": 181112,
+        "ID": "SFTC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SFUSD COMMUNITY FACILITIES DIST 90-1",
+        "Value": 168311,
+        "ID": "SFUSD COMMUNITY FACILITIES DIST 90-1",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SFCC-PUBLIC HEALTH",
+        "Value": 158741,
+        "ID": "SFCC-PUBLIC HEALTH",
+        "RefinementToken": null
+      },
+      {
+        "Key": "BANK OF AMERICA NA",
+        "Value": 143485,
+        "ID": "BANK OF AMERICA NA",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SF DEPARTMENT OF PUBLIC HEALTH",
+        "Value": 109774,
+        "ID": "SF DEPARTMENT OF PUBLIC HEALTH",
+        "RefinementToken": null
+      },
+      {
+        "Key": "FIRST REPUBLIC BANK",
+        "Value": 106200,
+        "ID": "FIRST REPUBLIC BANK",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CFTB",
+        "Value": 98170,
+        "ID": "CFTB",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SAN FRANCISCO TAX COLLECTOR",
+        "Value": 95804,
+        "ID": "SAN FRANCISCO TAX COLLECTOR",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SFCC-WATER DEPARTMENT",
+        "Value": 95613,
+        "ID": "SFCC-WATER DEPARTMENT",
+        "RefinementToken": null
+      },
+      {
+        "Key": "WASHINGTON MUTUAL BANK FA",
+        "Value": 85532,
+        "ID": "WASHINGTON MUTUAL BANK FA",
+        "RefinementToken": null
+      },
+      {
+        "Key": "JPMORGAN CHASE BANK NA",
+        "Value": 84789,
+        "ID": "JPMORGAN CHASE BANK NA",
+        "RefinementToken": null
+      },
+      {
+        "Key": "(FTB) FRANCHISE TAX BOARD",
+        "Value": 81049,
+        "ID": "(FTB) FRANCHISE TAX BOARD",
+        "RefinementToken": null
+      },
+      {
+        "Key": "US-IRS",
+        "Value": 74939,
+        "ID": "US-IRS",
+        "RefinementToken": null
+      },
+      {
+        "Key": "FIRST AMERICAN TITLE INS CO",
+        "Value": 74772,
+        "ID": "FIRST AMERICAN TITLE INS CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CALIFORNIA RECONVEYANCE CO",
+        "Value": 74643,
+        "ID": "CALIFORNIA RECONVEYANCE CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CEDD",
+        "Value": 68826,
+        "ID": "CEDD",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CALIF.ST-FRANCHISE TAX BOARD",
+        "Value": 67515,
+        "ID": "CALIF.ST-FRANCHISE TAX BOARD",
+        "RefinementToken": null
+      },
+      {
+        "Key": "VERDUGO TRUSTEE SVC CORP",
+        "Value": 64662,
+        "ID": "VERDUGO TRUSTEE SVC CORP",
+        "RefinementToken": null
+      },
+      {
+        "Key": "PRLAP INC",
+        "Value": 61477,
+        "ID": "PRLAP INC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "FIDELITY NATIONAL TITLE INS CO",
+        "Value": 59488,
+        "ID": "FIDELITY NATIONAL TITLE INS CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "USA IRS",
+        "Value": 51063,
+        "ID": "USA IRS",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SFCC-TAX COLLECTOR",
+        "Value": 47930,
+        "ID": "SFCC-TAX COLLECTOR",
+        "RefinementToken": null
+      },
+      {
+        "Key": "AMERICAN SECURITIES CO",
+        "Value": 44585,
+        "ID": "AMERICAN SECURITIES CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RECONTRUST CO NA",
+        "Value": 41394,
+        "ID": "RECONTRUST CO NA",
+        "RefinementToken": null
+      },
+      {
+        "Key": "EQUITABLE DEED CO",
+        "Value": 41383,
+        "ID": "EQUITABLE DEED CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SFCC-FAMILY SUPPORT BUREAU",
+        "Value": 37888,
+        "ID": "SFCC-FAMILY SUPPORT BUREAU",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CALIF.ST-EMPLOYMENT DEVELOPMENT DIVISION",
+        "Value": 37842,
+        "ID": "CALIF.ST-EMPLOYMENT DEVELOPMENT DIVISION",
+        "RefinementToken": null
+      },
+      {
+        "Key": "WELLS FARGO HOME MTG INC",
+        "Value": 36900,
+        "ID": "WELLS FARGO HOME MTG INC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "T D SERVICE CO",
+        "Value": 34870,
+        "ID": "T D SERVICE CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "BANK OF AMERICA NTSA",
+        "Value": 33454,
+        "ID": "BANK OF AMERICA NTSA",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CITIMORTGAGE INC",
+        "Value": 33209,
+        "ID": "CITIMORTGAGE INC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "J P MORGAN CHASE CUSTODY SVCS INC",
+        "Value": 30929,
+        "ID": "J P MORGAN CHASE CUSTODY SVCS INC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "U S BANK NA",
+        "Value": 27935,
+        "ID": "U S BANK NA",
+        "RefinementToken": null
+      },
+      {
+        "Key": "WYNDHAM VACATION RESORTS INC",
+        "Value": 27548,
+        "ID": "WYNDHAM VACATION RESORTS INC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "(EDD) EMPLOYMENT DEVELOPMENT DEPT.",
+        "Value": 26959,
+        "ID": "(EDD) EMPLOYMENT DEVELOPMENT DEPT.",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SFCC-RENT BOARD",
+        "Value": 26190,
+        "ID": "SFCC-RENT BOARD",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SFCC",
+        "Value": 26178,
+        "ID": "SFCC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CITIBANK NA",
+        "Value": 23945,
+        "ID": "CITIBANK NA",
+        "RefinementToken": null
+      },
+      {
+        "Key": "OLD REPUBLIC TITLE CO",
+        "Value": 23821,
+        "ID": "OLD REPUBLIC TITLE CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "GOLDEN WEST SVGS ASSN SVC CO",
+        "Value": 23782,
+        "ID": "GOLDEN WEST SVGS ASSN SVC CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "FEDERAL DEPOSIT INS CORP",
+        "Value": 21849,
+        "ID": "FEDERAL DEPOSIT INS CORP",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SFCC-CHILD SUPPORT SVCS",
+        "Value": 21757,
+        "ID": "SFCC-CHILD SUPPORT SVCS",
+        "RefinementToken": null
+      },
+      {
+        "Key": "WORLD SAVINGS BANK FSB",
+        "Value": 21562,
+        "ID": "WORLD SAVINGS BANK FSB",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SFCC-BUILDING INSPECTION",
+        "Value": 21395,
+        "ID": "SFCC-BUILDING INSPECTION",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CHASE MANHATTAN MTG CORP",
+        "Value": 20784,
+        "ID": "CHASE MANHATTAN MTG CORP",
+        "RefinementToken": null
+      },
+      {
+        "Key": "COUNTRYWIDE HOME LOANS INC",
+        "Value": 17365,
+        "ID": "COUNTRYWIDE HOME LOANS INC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NATIONAL CITY BANK",
+        "Value": 17150,
+        "ID": "NATIONAL CITY BANK",
+        "RefinementToken": null
+      },
+      {
+        "Key": "FREMONT BANK",
+        "Value": 16671,
+        "ID": "FREMONT BANK",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NATIONWIDE TITLE CLEARING INC",
+        "Value": 16619,
+        "ID": "NATIONWIDE TITLE CLEARING INC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CALIF. DEPT. OF CHILD SUPPORT SERVICES",
+        "Value": 16298,
+        "ID": "CALIF. DEPT. OF CHILD SUPPORT SERVICES",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CHICAGO TITLE INS CO",
+        "Value": 16166,
+        "ID": "CHICAGO TITLE INS CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "FIRST NATIONWIDE MTG CORP",
+        "Value": 16161,
+        "ID": "FIRST NATIONWIDE MTG CORP",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CITIBANK FSB",
+        "Value": 16154,
+        "ID": "CITIBANK FSB",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CHICAGO TITLE CO",
+        "Value": 15906,
+        "ID": "CHICAGO TITLE CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "QUICKEN LOANS INC",
+        "Value": 15869,
+        "ID": "QUICKEN LOANS INC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "GMAC MORTGAGE CORP",
+        "Value": 15534,
+        "ID": "GMAC MORTGAGE CORP",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CHASE MANHATTAN BANK USA NA",
+        "Value": 15398,
+        "ID": "CHASE MANHATTAN BANK USA NA",
+        "RefinementToken": null
+      },
+      {
+        "Key": "FIDELITY NATIONAL TITLE CO",
+        "Value": 15383,
+        "ID": "FIDELITY NATIONAL TITLE CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CTC REAL ESTATE SVCS",
+        "Value": 15146,
+        "ID": "CTC REAL ESTATE SVCS",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CITIBANK WEST FSB",
+        "Value": 14964,
+        "ID": "CITIBANK WEST FSB",
+        "RefinementToken": null
+      },
+      {
+        "Key": "WORLD S&L ASSN",
+        "Value": 14833,
+        "ID": "WORLD S&L ASSN",
+        "RefinementToken": null
+      },
+      {
+        "Key": "WASHINGTON MUTUAL BANK",
+        "Value": 14648,
+        "ID": "WASHINGTON MUTUAL BANK",
+        "RefinementToken": null
+      },
+      {
+        "Key": "FLAGSTAR BANK FSB",
+        "Value": 13939,
+        "ID": "FLAGSTAR BANK FSB",
+        "RefinementToken": null
+      },
+      {
+        "Key": "HEADLANDS MORTGAGE CO",
+        "Value": 13287,
+        "ID": "HEADLANDS MORTGAGE CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "GREENPOINT MORTGAGE FNDG INC",
+        "Value": 12920,
+        "ID": "GREENPOINT MORTGAGE FNDG INC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CBE",
+        "Value": 12017,
+        "ID": "CBE",
+        "RefinementToken": null
+      },
+      {
+        "Key": "FIRST AMERICAN TITLE CO",
+        "Value": 11804,
+        "ID": "FIRST AMERICAN TITLE CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "EXECUTIVE TRUSTEE SVCS LLC",
+        "Value": 11732,
+        "ID": "EXECUTIVE TRUSTEE SVCS LLC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SFCP",
+        "Value": 11729,
+        "ID": "SFCP",
+        "RefinementToken": null
+      },
+      {
+        "Key": "(EDD) EMPLOYMENT DEVELOPMENT DEPT",
+        "Value": 11491,
+        "ID": "(EDD) EMPLOYMENT DEVELOPMENT DEPT",
+        "RefinementToken": null
+      },
+      {
+        "Key": "SERRANO RECONVEYANCE CO",
+        "Value": 11409,
+        "ID": "SERRANO RECONVEYANCE CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "LOS ANGELES COUNTY",
+        "Value": 11097,
+        "ID": "LOS ANGELES COUNTY",
+        "RefinementToken": null
+      },
+      {
+        "Key": "UNIONBANCAL MORTGAGE CORP",
+        "Value": 11064,
+        "ID": "UNIONBANCAL MORTGAGE CORP",
+        "RefinementToken": null
+      },
+      {
+        "Key": "MASTER MORTGAGE CO",
+        "Value": 10951,
+        "ID": "MASTER MORTGAGE CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "FEDERAL HOME LOAN MTG CORP",
+        "Value": 10883,
+        "ID": "FEDERAL HOME LOAN MTG CORP",
+        "RefinementToken": null
+      },
+      {
+        "Key": "FOUNDERS TITLE CO",
+        "Value": 10859,
+        "ID": "FOUNDERS TITLE CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CONTINENTAL AUXILIARY CO",
+        "Value": 10782,
+        "ID": "CONTINENTAL AUXILIARY CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "BANK OF THE WEST",
+        "Value": 10631,
+        "ID": "BANK OF THE WEST",
+        "RefinementToken": null
+      },
+      {
+        "Key": "HSBC BANK USA NA",
+        "Value": 10542,
+        "ID": "HSBC BANK USA NA",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NORTH AMERICAN MTG CO",
+        "Value": 10538,
+        "ID": "NORTH AMERICAN MTG CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "QUICKEN LOANS LLC",
+        "Value": 10379,
+        "ID": "QUICKEN LOANS LLC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "FIRST AMERICAN TITLE",
+        "Value": 10166,
+        "ID": "FIRST AMERICAN TITLE",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NATIONSTAR MORTGAGE LLC",
+        "Value": 10155,
+        "ID": "NATIONSTAR MORTGAGE LLC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "STERLING BANK & TRUST FSB",
+        "Value": 9752,
+        "ID": "STERLING BANK & TRUST FSB",
+        "RefinementToken": null
+      },
+      {
+        "Key": "PROVIDENT FUNDING ASSOCS LP",
+        "Value": 9391,
+        "ID": "PROVIDENT FUNDING ASSOCS LP",
+        "RefinementToken": null
+      },
+      {
+        "Key": "FIRST CALIFORNIA MTG CO",
+        "Value": 9366,
+        "ID": "FIRST CALIFORNIA MTG CO",
+        "RefinementToken": null
+      },
+      {
+        "Key": "MORTGAGE ELECTRONIC RGSTRTN SYSTMS INC",
+        "Value": 9200,
+        "ID": "MORTGAGE ELECTRONIC RGSTRTN SYSTMS INC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "RESOLUTION TRUST CORP",
+        "Value": 9195,
+        "ID": "RESOLUTION TRUST CORP",
+        "RefinementToken": null
+      },
+      {
+        "Key": "MARIN CONVEYANCING CORP",
+        "Value": 9099,
+        "ID": "MARIN CONVEYANCING CORP",
+        "RefinementToken": null
+      },
+      {
+        "Key": "UNITED COMMERCIAL BANK",
+        "Value": 8905,
+        "ID": "UNITED COMMERCIAL BANK",
+        "RefinementToken": null
+      },
+      {
+        "Key": "NORWEST MORTGAGE INC",
+        "Value": 8718,
+        "ID": "NORWEST MORTGAGE INC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "HSBC MORTGAGE CORP USA",
+        "Value": 8577,
+        "ID": "HSBC MORTGAGE CORP USA",
+        "RefinementToken": null
+      },
+      {
+        "Key": "COUNTRYWIDE FUNDING CORP",
+        "Value": 8393,
+        "ID": "COUNTRYWIDE FUNDING CORP",
+        "RefinementToken": null
+      },
+      {
+        "Key": "PNC BANK NA",
+        "Value": 8388,
+        "ID": "PNC BANK NA",
+        "RefinementToken": null
+      },
+      {
+        "Key": "CITICORP MORTGAGE INC",
+        "Value": 8299,
+        "ID": "CITICORP MORTGAGE INC",
+        "RefinementToken": null
+      },
+      {
+        "Key": "N A MORTGAGE SVCS INC",
+        "Value": 8249,
+        "ID": "N A MORTGAGE SVCS INC",
+        "RefinementToken": null
+      }
+    ]
+  }
+}

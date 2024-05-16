@@ -10,7 +10,8 @@ import fs from "fs";
 // BUG: inserting 40 values into the database works but 41 gives an error:
 // Error: SQLITE_ERROR: 42 values for 41 columns
 // the column of suspicion is "Supervisor District 2012", but unsure of how it's erroring out - it's a normal text field
-// workaround: delete that column from the database and remove it from the row. then try (ran out of time)
+// workaround: delete that column from the database and remove it from the row. then try (ran out of time)is
+// TODO: [add an id INTEGER PRIMARY KEY AUTOINCREMENT] to the sfpropertydata table
 
 async function setupDatabase() {
   const db = await open({
