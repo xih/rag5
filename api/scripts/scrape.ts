@@ -24,6 +24,10 @@ import { blockLotSearchResultsSchema } from "../schemas/blockLotSchema";
 import _ from "underscore";
 // import writeJSONtoFile from "fs/promises";
 import { writeFile } from "fs/promises";
+import { fileURLToPath } from "node:url";
+import sqlite3 from "sqlite3";
+import { join } from "node:path";
+import { open } from "sqlite";
 
 const userAgent = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36`;
 const cookie = `googtrans=/en/en; BIGipServerASR-102_recorder.sfgov.org_PRD_EXT_pool=2160622032.20480.0000; HideDetails=0`;
@@ -158,13 +162,74 @@ async function writeJSONtoFileFunc(data) {
   }
 }
 
+async function writeSearchResultToSql(data) {
+  const db = await open({
+    filename: join(
+      fileURLToPath(import.meta.url),
+      "../../data/sfPropertyTaxRolls.sqlite"
+    ),
+    driver: sqlite3.Database,
+  });
+
+  await db.run("BEGIN TRANSACTION");
+  console.log("beginning transation");
+
+  // console.log("what is data", data);
+
+  // bug: have to iterate through data.searchresults and insert each object into the database
+
+  for (const searchResultRow of data.SearchResults) {
+    const newSearchRow = {
+      id: searchResultRow.ID,
+      block: data.block,
+      lot: data.lot,
+      ...searchResultRow,
+    };
+
+    console.log(newSearchRow, "1. new search row");
+
+    await db.run(
+      `INSERT INTO SearchResults (PropertyTaxId, Block, Lot, AccessorCountyId, PrimaryDocNumber, DocumentDate, FilingCode, Names, SecondaryDocNumber, BookType, BookNumber, NumberOfPages)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?);`,
+      Object.values(newSearchRow)
+    );
+  }
+
+  // variables i need to pass:
+  // 1. block, lot, accessor county ID
+
+  // await db.run(
+  //   `INSERT INTO SearchResults (PropertyTaxId, Block, Lot, AccessorCountyId, PrimaryDocNumber, DocumentDate, FilingCode, Names, SecondaryDocNumber, BookType, BookNumber, NumberOfPages)
+  // VALUES (?,?,?,?,?,?,?,?,?,?,?,?);`,
+  //   Object.values(data)
+  // );
+
+  await db.run("COMMIT");
+  console.log("commited to the database");
+}
+
 async function main() {
   const key = await getSecureKey();
-  const result = await getOneBlockLot({ block: "0001", lot: "001" }, key);
 
-  writeJSONtoFileFunc(result);
+  const block = "0001";
+  const lot = "001";
+
+  const result = await getOneBlockLot({ block: block, lot: lot }, key);
+
+  // writeJSONtoFileFunc(result);
   console.log(result?.latestResult);
-  console.log(result);
+
+  // pass the block and lot to result
+  const resultWithBlockLot = {
+    block,
+    lot,
+    ...result,
+  };
+
+  writeSearchResultToSql(resultWithBlockLot);
+  // console.log(result);
+
+  // instead of writing result to json, write this to the sqliteDatabase
 }
 
 main();
