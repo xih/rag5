@@ -20,6 +20,9 @@
 // 16. for MVP just store "SearchResults" array into the database first
 // 17. create a new table called propertyNames that has all the results
 // 18. first create a new table called NamesForPagination that is a 1:1 to the API query
+// 19. make a table for output names and then use that to measure the difference between the two
+// 20. create a function called load missing names that checks betrween the two tables
+// AssessorHistoricalPropertyTaxRolls2 and PropertyNames and gives back the new block and lot numbers by batch of 5
 
 import z from "zod";
 import { blockLotSearchResultsSchema } from "../schemas/blockLotSchema";
@@ -241,8 +244,41 @@ async function getNamesForPagination(
   return namesForPagaginationForOneDocument;
 }
 
-// async function storeNamesForPaginationIntoDatabase {
+async function loadMissingNames(
+  block: string,
+  lot: string,
+  limit: number,
+  db: sqlite3.Database
+): Promise<{ block: string; lot: string }[]> {
+  const result = await db.all(
+    `SELECT DISTINCT AssessorHistoricalPropertyTaxRolls2.block AS block, AssessorHistoricalPropertyTaxRolls2.lot \
+    AS lot FROM AssessorHistoricalPropertyTaxRolls2 LEFT JOIN PropertyNames \
+    ON AssessorHistoricalPropertyTaxRolls2.block = PropertyNames.block AND\
+     AssessorHistoricalPropertyTaxRolls2.lot = PropertyNames.lot \
+     WHERE (AssessorHistoricalPropertyTaxRolls2.block, AssessorHistoricalPropertyTaxRolls2.lot) > (?,?) \
+     AND PropertyNames.id IS NULL ORDER BY AssessorHistoricalPropertyTaxRolls2.block ASC, \
+     AssessorHistoricalPropertyTaxRolls2.lot ASC LIMIT ?`,
+    block,
+    lot,
+    limit
+  );
 
+  return result;
+}
+
+// async function loadMissingNames(
+//   block: string,
+//   lot: string,
+//   limit: number
+// ): Promise<{ block: string; lot: string }[]> {
+//   const result = await db.all(
+//     "SELECT sres_properties.block AS block, sres_properties.lot AS lot FROM sres_properties LEFT JOIN property_names ON sres_properties.block = property_names.block AND sres_properties.lot = property_names.lot WHERE (sres_properties.block, sres_properties.lot) > (?, ?) AND property_names.id IS NULL ORDER BY sres_properties.block ASC, sres_properties.lot ASC LIMIT ?",
+//     block,
+//     lot,
+//     limit
+//   );
+
+//   return result;
 // }
 
 async function main() {
@@ -302,13 +338,24 @@ async function writeNamesForPaginationTable(data) {
 }
 
 async function main2() {
-  const key = await getSecureKey();
-  console.log("got the key");
+  // const key = await getSecureKey();
+  // console.log("got the key");
 
-  const paginationNames = await getNamesForPagination("11068544", key);
-  // console.log(paginationNames, "paginationNames");
+  // const paginationNames = await getNamesForPagination("11068544", key);
+  // // console.log(paginationNames, "paginationNames");
 
-  writeNamesForPaginationTable(paginationNames);
+  // writeNamesForPaginationTable(paginationNames);
+
+  const db = await open({
+    filename: join(
+      fileURLToPath(import.meta.url),
+      "../../data/sfPropertyTaxRolls.sqlite"
+    ),
+    driver: sqlite3.Database,
+  });
+
+  const result = await loadMissingNames("0001", "001", 100, db);
+  console.log(result, "result");
 }
 
 main2();

@@ -57,7 +57,11 @@ async function makeNewPropertyNamesTable() {
   await db.exec(`
   CREATE TABLE IF NOT EXISTS PropertyNames (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    
+    block TEXT,
+    lot TEXT,
+    name TEXT,
+    documentId TEXT,
+    FOREIGN KEY(documentId) REFERENCES SearchResults(PropertyTaxId) 
 );`);
   // not finished
 
@@ -102,7 +106,8 @@ async function makeNewNamesForPaginationTable() {
 
 async function main() {
   // const db = await makeNewSearchResultsTable();
-  await makeNewNamesForPaginationTable();
+  // await makeNewNamesForPaginationTable();
+  await makeNewPropertyNamesTable();
 }
 
 main();
