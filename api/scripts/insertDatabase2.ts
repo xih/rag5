@@ -160,6 +160,7 @@ async function loadCSVData(db: sqlite3.Database) {
 
 async function main() {
   const db = await setUpDatabase();
+  // @ts-ignore unknown type error
   await loadCSVData(db);
 }
 

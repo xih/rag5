@@ -40,8 +40,69 @@ async function makeNewSearchResultsTable() {
   return db;
 }
 
+/**
+ * this will be used to keep track of all the names scrapped and we select between this table and the tax table to
+ * track all block, lots already scraped
+ * @returns
+ */
+async function makeNewPropertyNamesTable() {
+  const db = await open({
+    filename: join(
+      fileURLToPath(import.meta.url),
+      "../../data/sfPropertyTaxRolls.sqlite"
+    ),
+    driver: sqlite3.Database,
+  });
+
+  await db.exec(`
+  CREATE TABLE IF NOT EXISTS PropertyNames (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    
+);`);
+  // not finished
+
+  console.log("table created successfully");
+
+  return db;
+}
+
+async function makeNewNamesForPaginationTable() {
+  const db = await open({
+    filename: join(
+      fileURLToPath(import.meta.url),
+      "../../data/sfPropertyTaxRolls.sqlite"
+    ),
+    driver: sqlite3.Database,
+  });
+
+  await db.exec(`
+  CREATE TABLE IF NOT EXISTS NamesForPagination (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    NameTypeDesc TEXT,
+    FirstName TEXT,
+    MiddleName TEXT,
+    LastName TEXT,
+    DocumentStatus TEXT,
+    ReturnedDate TEXT,
+    CorrectionDate TEXT,
+    CrossRefDocNumber TEXT,
+    DocInternalID TEXT,
+    NDReturnedDate TEXT,
+    Fullname TEXT,
+    NameInternalID TEXT,
+    TotalNamesCount INTEGER,
+    Block TEXT,
+    Lot TEXT,
+    FOREIGN KEY(NameInternalID) REFERENCES SearchResults(PropertyTaxId) 
+    FOREIGN KEY(Block, Lot) REFERENCES AssessorHistoricalPropertyTaxRolls2(Block, Lot)
+);`);
+
+  console.log("table created");
+}
+
 async function main() {
-  const db = await makeNewSearchResultsTable();
+  // const db = await makeNewSearchResultsTable();
+  await makeNewNamesForPaginationTable();
 }
 
 main();

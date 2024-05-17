@@ -18,6 +18,8 @@
 // 14. create a table for scraped output
 // 15. write the json to a file, then ask chatGPT the best way to store this in SQL
 // 16. for MVP just store "SearchResults" array into the database first
+// 17. create a new table called propertyNames that has all the results
+// 18. first create a new table called NamesForPagination that is a 1:1 to the API query
 
 import z from "zod";
 import { blockLotSearchResultsSchema } from "../schemas/blockLotSchema";
@@ -28,6 +30,7 @@ import { fileURLToPath } from "node:url";
 import sqlite3 from "sqlite3";
 import { join } from "node:path";
 import { open } from "sqlite";
+import { NamesForPaginationSchema } from "../schemas/namesForPaginationSchema";
 
 const userAgent = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36`;
 const cookie = `googtrans=/en/en; BIGipServerASR-102_recorder.sfgov.org_PRD_EXT_pool=2160622032.20480.0000; HideDetails=0`;
@@ -208,6 +211,40 @@ async function writeSearchResultToSql(data) {
   console.log("commited to the database");
 }
 
+async function getNamesForPagination(
+  searchResultId: string,
+  key: encryptedKeyAndPassword
+) {
+  // searchResultsId is 5703079 and that is the id that is needed to get this query working
+  // example query: https://recorder.sfgov.org/SearchService/api/search/GetNamesForPagination/5703079/1/20
+  const res = await fetch(
+    `https://recorder.sfgov.org/SearchService/api/search/GetNamesForPagination/${searchResultId}/1/20`,
+    {
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        Authorization: "Bearer",
+        "User-Agent": userAgent,
+        Referer: "https://recorder.sfgov.org/",
+        Cookie: cookie,
+        EncryptedKey: key.encryptedKey,
+        Password: key.password,
+      },
+    }
+  );
+  console.log("fetched from the recorder's office");
+
+  const data = await res.json();
+
+  const namesForPagaginationForOneDocument =
+    NamesForPaginationSchema.parse(data);
+
+  return namesForPagaginationForOneDocument;
+}
+
+// async function storeNamesForPaginationIntoDatabase {
+
+// }
+
 async function main() {
   const key = await getSecureKey();
 
@@ -232,4 +269,46 @@ async function main() {
   // instead of writing result to json, write this to the sqliteDatabase
 }
 
-main();
+async function writeNamesForPaginationTable(data) {
+  const db = await open({
+    filename: join(
+      fileURLToPath(import.meta.url),
+      "../../data/sfPropertyTaxRolls.sqlite"
+    ),
+    driver: sqlite3.Database,
+  });
+
+  console.log("does db open");
+
+  await db.run("BEGIN TRANSACTION");
+  console.log("beginning transation");
+
+  for (const nameRow of data.NamesForPagination) {
+    const newNameRow = {
+      ...nameRow,
+    };
+
+    console.log(newNameRow, "1. new search row");
+
+    await db.run(
+      `INSERT INTO NamesForPagination (NameTypeDesc, FirstName, MiddleName, LastName, DocumentStatus, ReturnedDate, CorrectionDate, CrossRefDocNumber, DocInternalID, NDReturnedDate, Fullname, NameInternalID, TotalNamesCount)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+      Object.values(newNameRow)
+    );
+  }
+
+  await db.run("COMMIT");
+  console.log("commited to NamesForPagination table in the database");
+}
+
+async function main2() {
+  const key = await getSecureKey();
+  console.log("got the key");
+
+  const paginationNames = await getNamesForPagination("11068544", key);
+  // console.log(paginationNames, "paginationNames");
+
+  writeNamesForPaginationTable(paginationNames);
+}
+
+main2();

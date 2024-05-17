@@ -224,6 +224,7 @@ INSERT INTO SfPropertyData (
 
 async function main() {
   const db = await setupDatabase();
+  // @ts-ignore unknown type error
   await loadCsvData(db);
 }
 
