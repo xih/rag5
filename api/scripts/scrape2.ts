@@ -1,9 +1,10 @@
 // [5-21-2024] Rewrite the script from scratch
-// 1. get the secure key
-// 2. call the
+// 1. get the secure key, getOneBlock
+// 2. get a list of searchResultIds and call the documentAPI with that
 
 import { blockLotSearchResultsSchema } from "../schemas/blockLotSchema";
 import { accessorRecorderEncryptedKeySchema } from "../schemas/encryptedKeySchema";
+import { NamesForPaginationSchema } from "../schemas/namesForPaginationSchema";
 
 const userAgent =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
@@ -66,19 +67,116 @@ async function getOneBlockLot(
 
   const blockLotData = blockLotSearchResultsSchema.parse(data);
 
-  console.log(blockLotData);
+  // console.log(blockLotData);
+  return blockLotData;
+}
+
+async function getNamesOnDocumentFromSearchResultId(
+  searchResultId: string,
+  secureKey: SecureKey
+) {
+  const res = await fetch(
+    `https://recorder.sfgov.org/SearchService/api/search/GetNamesForPagination/11070863/1/20`,
+    {
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        Authorization: "Bearer",
+        Connection: "keep-alive",
+        Referer: "https://recorder.sfgov.org/",
+        "User-Agent": userAgent,
+        Cookie: cookie,
+        EncryptedKey: secureKey.encryptedKey,
+        Password: secureKey.password,
+      },
+    }
+  );
+
+  const data = await res.json();
+
+  const namesOnDocument = NamesForPaginationSchema.parse(data);
+
+  return namesOnDocument;
+}
+
+interface ResultObject {
+  Grantor?: string;
+  Grantee?: string;
+  TotalNamesCount?: number;
+  NameInternalID?: string;
+  DocumentId?: string;
+}
+
+interface DataObject {
+  NameTypeDesc: string;
+  FirstName: null | string;
+  MiddleName: null | string;
+  LastName: null | string;
+  DocumentStatus: null | string;
+  ReturnedDate: string;
+  CorrectionDate: string;
+  CrossRefDocNumber: string;
+  DocInternalID: null | string;
+  NDReturnedDate: null | string;
+  Fullname: string;
+  NameInternalID: string;
+  TotalNamesCount: number;
 }
 
 async function main() {
   const key = await getSecureKey();
 
-  const blockLot = await getOneBlockLot(
+  const blockLotData = await getOneBlockLot(
     {
       block: "0001",
       lot: "001",
     },
     key
   );
+
+  const documentIdsOfBlockLot = blockLotData.SearchResults.map(
+    (searchResult) => searchResult.ID
+  );
+
+  console.log(documentIdsOfBlockLot, "documentIdsOfBlockLot");
+
+  const combinedResults: ResultObject[] = [];
+
+  for (const searchResult of blockLotData.SearchResults) {
+    const namesOnDocument = await getNamesOnDocumentFromSearchResultId(
+      searchResult.ID,
+      key
+    );
+
+    const result = namesOnDocument.NamesForPagination.reduce(
+      (acc: ResultObject, obj: DataObject) => {
+        if (obj.NameTypeDesc === "Grantor") {
+          acc.Grantor = acc.Grantor
+            ? acc.Grantor + ", " + obj.Fullname
+            : obj.Fullname;
+        } else if (obj.NameTypeDesc === "Grantee") {
+          acc.Grantee = acc.Grantee
+            ? acc.Grantee + ", " + obj.Fullname
+            : obj.Fullname;
+        }
+
+        acc.TotalNamesCount = obj.TotalNamesCount;
+        acc.NameInternalID = obj.NameInternalID;
+        acc.DocumentId = searchResult.ID;
+
+        return acc;
+      },
+      {} as ResultObject
+    );
+
+    const { ID, ...newSearchResultWithoutId } = searchResult;
+
+    const searchResult2 = { ...newSearchResultWithoutId, ...result }; // Spread result into searchResult
+
+    combinedResults.push(searchResult2); // Add searchResult to the combinedResults array
+  }
+
+  console.log(combinedResults);
+  // combinedResults is one Document
 }
 
 main();
