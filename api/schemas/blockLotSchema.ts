@@ -45,5 +45,5 @@ const refinementPanelDataSchema = z.object({
 export const blockLotSearchResultsSchema = z.object({
   ResultCount: z.number(),
   SearchResults: z.array(searchResultSchema),
-  RefinementPanelData: refinementPanelDataSchema,
+  RefinementPanelData: z.optional(refinementPanelDataSchema),
 });

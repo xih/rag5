@@ -23,6 +23,18 @@
 // 19. make a table for output names and then use that to measure the difference between the two
 // 20. create a function called load missing names that checks betrween the two tables
 // AssessorHistoricalPropertyTaxRolls2 and PropertyNames and gives back the new block and lot numbers by batch of 5
+// 21. [TODO] - getting a Error: SQLITE_BUSY: database is locked at the end of the script so need to chatgpt to fix this
+// 22. [TODO] - namesForPagination has no block and lot foreign key
+// [5-17-2024] add dates to the namesForpagination table [done- added documentdate]
+// [5-20-2024]
+// 23. change ID to accessorID, so that is doesn't conflict with the databaseID [done]
+// 24. make a new database that can store namesAndSearchResults as rows
+// 25. then go through the main function and use the batch result to create it
+// 26. [bug] getting stuck on the same script - (block 0002, lot 001) - repeating this 20 times [fixed]
+// 27. [todo] export the table to sheets and put it on google
+// 28. [PROBLEMS] - 1. document date is always 5/13/2024 (look into this)
+// 29. 2. there is a lot of repetiitive information becuase grantor and grantee are a value, instead convert it to a column
+// and merge all the different rows together so that there would just be one row for a grantor and grantee
 
 import z from "zod";
 import { blockLotSearchResultsSchema } from "../schemas/blockLotSchema";
@@ -192,7 +204,7 @@ async function writeSearchResultToSql(data) {
       ...searchResultRow,
     };
 
-    console.log(newSearchRow, "1. new search row");
+    // console.log(newSearchRow, "1. new search row");
 
     await db.run(
       `INSERT INTO SearchResults (PropertyTaxId, Block, Lot, AccessorCountyId, PrimaryDocNumber, DocumentDate, FilingCode, Names, SecondaryDocNumber, BookType, BookNumber, NumberOfPages)
@@ -234,7 +246,6 @@ async function getNamesForPagination(
       },
     }
   );
-  console.log("fetched from the recorder's office");
 
   const data = await res.json();
 
@@ -314,17 +325,14 @@ async function writeNamesForPaginationTable(data) {
     driver: sqlite3.Database,
   });
 
-  console.log("does db open");
-
   await db.run("BEGIN TRANSACTION");
-  console.log("beginning transation");
 
   for (const nameRow of data.NamesForPagination) {
     const newNameRow = {
       ...nameRow,
     };
 
-    console.log(newNameRow, "1. new search row");
+    // console.log(newNameRow, "1. new search row");
 
     await db.run(
       `INSERT INTO NamesForPagination (NameTypeDesc, FirstName, MiddleName, LastName, DocumentStatus, ReturnedDate, CorrectionDate, CrossRefDocNumber, DocInternalID, NDReturnedDate, Fullname, NameInternalID, TotalNamesCount)
@@ -336,6 +344,250 @@ async function writeNamesForPaginationTable(data) {
   await db.run("COMMIT");
   console.log("commited to NamesForPagination table in the database");
 }
+
+interface NamesForPaginationType {
+  NameTypeDesc: string;
+  FirstName: string | null;
+  MiddleName: string | null;
+  LastName: string | null;
+  DocumentStatus: string | null;
+  ReturnedDate: string;
+  CorrectionDate: string;
+  CrossRefDocNumber: string;
+  DocInternalID: string | null;
+  NDReturnedDate: string | null;
+  Fullname: string;
+  NameInternalID: string;
+  TotalNamesCount: number;
+}
+
+interface SearchResultType {
+  ID: string;
+  PrimaryDocNumber: string;
+  DocumentDate: string;
+  FilingCode: string;
+  Names: string;
+  SecondaryDocNumber: string;
+  BookType: string;
+  BookNumber: string;
+  NumberOfPages: string;
+}
+
+type NamesAndSearchResultsType = NamesForPaginationType & SearchResultType;
+
+async function getAllDocumentsAndWriteToDB(
+  block: string,
+  lot: string,
+  key: encryptedKeyAndPassword
+) {
+  const data = await getOneBlockLot({ block, lot }, key);
+  if (!data) {
+    return;
+  }
+  const resultWithBlockLot = {
+    block,
+    lot,
+    ...data,
+  };
+
+  // store SearchResults array to sqlite3
+  writeSearchResultToSql(resultWithBlockLot);
+
+  let officialDocumentNames: NamesForPaginationType[] = [];
+
+  let namesAndSearchResults: NamesAndSearchResultsType[] = [];
+  let namesAndSearchResults2: (NamesForPaginationType & SearchResultType)[] =
+    [];
+
+  if (data?.SearchResults) {
+    for (const searchResult of data.SearchResults) {
+      const paginationNames = await getNamesForPagination(searchResult.ID, key);
+
+      officialDocumentNames.push(...paginationNames.NamesForPagination);
+
+      const searchResultSpreadIntoNames =
+        paginationNames.NamesForPagination.map((item) => ({
+          GetNamesForPaginationQueryId: searchResult.ID,
+          ...searchResult,
+          ...item,
+          Block: block,
+          Lot: lot,
+        }));
+
+      namesAndSearchResults2.push(...searchResultSpreadIntoNames);
+      // console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      // console.log(searchResultSpreadIntoNames, "searchResultSpreadIntoNames");
+      // console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+      // // namesAndSearchResults2.concat(searchResultSpreadIntoNames);
+      // console.log(namesAndSearchResults2, "namesAndSearchResults2");
+      // console.log("++++++++++++++++++++++++++++++++");
+
+      // console.log({
+      //   searchResult,
+      //   ...paginationNames.NamesForPagination,
+      // });
+      // console.log("##################################");
+      // console.log({
+      //   searchResult,
+      //   namesForPagination: paginationNames.NamesForPagination,
+      // });
+      // console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+      // namesAndSearchResults.push({
+      //   searchResult,
+      //   ...paginationNames.NamesForPagination
+      // })
+
+      // merge searchResult with pagaintionNames.NamesForPagination
+
+      // [5-20-2024] this is giving Error: SQLITE_BUSY: database is locked
+      // writeNamesForPaginationTable(paginationNames);
+    }
+  }
+  // need to return something here so that i can write to the PropertyNamesTable
+  // return the entire searchResults array with names
+
+  // goal merge data with the names for pagination
+
+  // return data?.SearchResults;
+  // console.log(namesAndSearchResults2, "what is this~~~~");
+  return namesAndSearchResults2;
+}
+
+async function processAllBlockAndLots(block = "", lot = "") {
+  let completed = 0;
+  let count = 0;
+
+  const db = await open({
+    filename: join(
+      fileURLToPath(import.meta.url),
+      "../../data/sfPropertyTaxRolls.sqlite"
+    ),
+    driver: sqlite3.Database,
+  });
+
+  while (count < 100) {
+    const missingBlockAndLots = await loadMissingNames(block, lot, 1, db);
+    if (missingBlockAndLots.length === 0) {
+      break;
+    }
+
+    const key = await getSecureKey();
+    const batch = await Promise.all(
+      missingBlockAndLots.map(async ({ block, lot }) => {
+        const namesAndSearchResults = await getAllDocumentsAndWriteToDB(
+          block,
+          lot,
+          key
+        );
+        // console.log("1.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        // console.log("namesAndSearchResults", namesAndSearchResults);
+        // console.log("2.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        return { block, lot, namesAndSearchResults };
+      })
+    );
+
+    // console.log("batch", batch);
+
+    for (const { block, lot, namesAndSearchResults } of batch) {
+      if (namesAndSearchResults && namesAndSearchResults.length === 0) {
+        console.log(`No results for block ${block} and ${lot}`);
+        continue;
+      }
+
+      await db.run("BEGIN TRANSACTION");
+      if (namesAndSearchResults) {
+        for (const nameAndSearch of namesAndSearchResults) {
+          await db.run(
+            `
+          INSERT INTO NamesAndSearchResults2 (GetNamesForPaginationQueryId, ID, PrimaryDocNumber, \
+            DocumentDate, FilingCode, Names, SecondaryDocNumber, BookType, \
+            BookNumber, NumberOfPages, NameTypeDesc, FirstName, MiddleName, LastName, DocumentStatus, ReturnedDate, \
+            CorrectionDate, CrossRefDocNumber, DocInternalID, NDReturnedDate, \
+            Fullname, NameInternalID, TotalNamesCount, Block, Lot) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+            Object.values(nameAndSearch)
+          );
+          // await db.run(
+          //   `INSERT INTO NamesAndSearchResults (block, lot, name, documentId, createdAt) VALUES (?, ?, ?, ?, ?, NOW())`,
+          //   block,
+          //   lot,
+          //   name
+          // );
+        }
+        await db.run("COMMIT");
+      }
+    }
+    block = missingBlockAndLots[missingBlockAndLots.length - 1].block;
+    lot = missingBlockAndLots[missingBlockAndLots.length - 1].lot;
+    completed += missingBlockAndLots.length;
+    console.log(
+      `Completed ${completed} properties (block ${block}, lot ${lot}))`
+    );
+
+    count++;
+    // console.log("increment count");
+
+    // console.log(
+    //   `Completed ${completed} properties (block ${block}, lot ${lot}))`
+    // );
+  }
+}
+
+// Refernce
+// async function getNames(block: string, lot: string, key: QueryKey) {
+//   const result = await getFirstResult({ block, lot }, key);
+//   if (!result) return [];
+//   const names = await getNamesForResult(result.id, key);
+//   return names;
+// }
+
+// Reference:
+
+// async function main(block = "", lot = "") {
+//   let completed = 0;
+// while (true) {
+//   const missing = await loadMissingNames(block, lot, 5);
+//   if (missing.length === 0) break;
+
+//   const key = await getKey();
+//   const batch = await Promise.all(
+//     missing.map(async ({ block, lot }) => {
+//       const names = await getNames(block, lot, key);
+//       return { block, lot, names };
+//     })
+//   );
+
+//   for (const { block, lot, names } of batch) {
+//     if (names.length === 0) {
+//       console.log(`No results for block ${block} and lot ${lot}`);
+//       continue;
+//     }
+
+//     await db.run("BEGIN TRANSACTION");
+//     for (const name of names) {
+//       await db.run(
+//         // add a created timestamp as a row to the table to have metadata on when we creeated it
+//         // make an index off the (block, lot, type name), then insert new ones. if conflict on index do nothing
+//         "INSERT INTO property_names (block, lot, type, name, id, created_at) VALUES (?, ?, ?, ?, ?, NOW())",
+//         block,
+//         lot,
+//         name.type,
+//         name.name,
+//         name.id
+//       );
+//     }
+//     await db.run("COMMIT");
+//   }
+
+//   block = missing[missing.length - 1].block;
+//   lot = missing[missing.length - 1].lot;
+//   completed += missing.length;
+//   console.log(
+//     `Completed ${completed} properties (block ${block}, lot ${lot}))`
+//   );
+// }
+// }
 
 async function main2() {
   // const key = await getSecureKey();
@@ -354,8 +606,10 @@ async function main2() {
     driver: sqlite3.Database,
   });
 
+  // @ts-ignore db type error
   const result = await loadMissingNames("0001", "001", 100, db);
   console.log(result, "result");
 }
 
-main2();
+// main2();
+processAllBlockAndLots("0001", "001");
