@@ -8,16 +8,30 @@
 // 5. block - 0001, lot - 001 -> APN: 0001001 (add this as a column to the database)
 // 6. [todo: ] reverse engineer this:
 // https://recorder.sfgov.org/SearchService/api/search/GetDocumentDetails/5703079
-// 7. bug on fetch
+// 7. bug on fetch [fixed]
+// 8. [todo] - scrape on block, lots, not processed yet
+// 8. [todo] - save to database
 
+import sqlite3 from "sqlite3";
 import { blockLotSearchResultsSchema } from "../schemas/blockLotSchema";
 import { accessorRecorderEncryptedKeySchema } from "../schemas/encryptedKeySchema";
 import { NamesForPaginationSchema } from "../schemas/namesForPaginationSchema";
+import { open } from "sqlite";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const userAgent =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 const cookie =
   "googtrans=/en/en; BIGipServerASR-102_recorder.sfgov.org_PRD_EXT_pool=2160622032.20480.0000; HideDetails=0";
+
+const db = await open({
+  filename: join(
+    fileURLToPath(import.meta.url),
+    "../../data/sfPropertyTaxRolls.sqlite"
+  ),
+  driver: sqlite3.Database,
+});
 
 async function getSecureKey() {
   const res = await fetch(
@@ -148,6 +162,29 @@ interface DataObject {
   TotalNamesCount: number;
 }
 
+async function loadMissingNames(
+  block: string,
+  lot: string,
+  db: sqlite3.Database,
+  limit: number
+) {
+  // make a new table: PropertyDocuments
+  const result = await db.all(
+    `SELECT DISTINCT AssessorHistoricalPropertyTaxRolls2.block AS block, AssessorHistoricalPropertyTaxRolls2.lot AS lot\
+    FROM AssessorHistoricalPropertyTaxRolls2 LEFT JOIN PropertyDocuments \
+    ON AssessorHistoricalPropertyTaxRolls2.block = PropertyDocuments.block AND\
+    AssessorHistoricalPropertyTaxRolls2.lot = AssessorHistoricalPropertyTaxRolls2.lot \
+    WHERE (AssessorHistoricalPropertyTaxRolls2.block, AssessorHistoricalPropertyTaxRolls2.lot) > (?,?)\
+    AND PropertyDocuments.id is NULL ORDER BY AssessorHistoricalPropertyTaxRolls2.block ASC,
+    AssessorHistoricalPropertyTaxRolls2.lot ASC LIMIT ?`,
+    block,
+    lot,
+    limit
+  );
+
+  return result;
+}
+
 async function main(block: string, lot: string) {
   const key = await getSecureKey();
 
@@ -212,4 +249,6 @@ async function main(block: string, lot: string) {
   // console.log("blockLotData", blockLotData);
 }
 
-main("0001", "001");
+// main("0001", "001");
+
+console.log(await loadMissingNames("0001", "001", db, 5));
