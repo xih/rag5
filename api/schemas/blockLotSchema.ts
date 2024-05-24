@@ -37,13 +37,27 @@ const nameSchema = z.object({
 });
 
 const refinementPanelDataSchema = z.object({
-  Years: z.array(yearSchema),
-  FilingCodes: z.array(filingCodeSchema),
-  Names: z.array(nameSchema),
+  Years: z.union([z.array(yearSchema), z.null()]),
+  FilingCodes: z.union([z.array(filingCodeSchema), z.null()]),
+  Names: z.union([z.array(nameSchema), z.null()]),
 });
 
 export const blockLotSearchResultsSchema = z.object({
   ResultCount: z.number(),
   SearchResults: z.array(searchResultSchema),
-  RefinementPanelData: z.optional(refinementPanelDataSchema),
+  RefinementPanelData: z
+    .union([refinementPanelDataSchema, z.null()])
+    .optional(),
 });
+// added because of this zoderror
+//ZodError: [
+//   {
+//     "code": "invalid_type",
+//     "expected": "object",
+//     "received": "null",
+//     "path": [
+//       "RefinementPanelData"
+//     ],
+//     "message": "Expected object, received null"
+//   }
+// ]

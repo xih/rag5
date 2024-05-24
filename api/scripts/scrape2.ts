@@ -12,6 +12,10 @@
 // 8. [todo] - scrape on block, lots, not processed yet
 // 8. [todo] - save to database
 
+// 9. [5-24-2024]
+// 1. save specific owners to propertyOwners table
+// 2. save to document_owners table too
+
 import sqlite3 from "sqlite3";
 import { blockLotSearchResultsSchema } from "../schemas/blockLotSchema";
 import { accessorRecorderEncryptedKeySchema } from "../schemas/encryptedKeySchema";
@@ -100,10 +104,7 @@ async function getOneBlockLot(
 
   const blockLotData = blockLotSearchResultsSchema.parse(data);
 
-  console.log(
-    blockLotData.SearchResults.length,
-    "22. What is the length here?"
-  );
+  console.log("number of documents:", blockLotData.SearchResults.length);
 
   // console.log(blockLotData);
   return blockLotData;
@@ -139,8 +140,8 @@ async function getNamesOnDocumentFromSearchResultId(
 }
 
 interface ResultObject {
-  Grantor?: string;
-  Grantee?: string;
+  Grantor: string;
+  Grantee: string;
   TotalNamesCount?: number;
   NameInternalID?: string;
   DocumentId?: string;
@@ -167,7 +168,7 @@ async function loadMissingNames(
   lot: string,
   db: sqlite3.Database,
   limit: number
-) {
+): Promise<{ block: string; lot: string }[]> {
   // make a new table: PropertyDocuments
   const result = await db.all(
     `SELECT DISTINCT AssessorHistoricalPropertyTaxRolls2.block AS block, AssessorHistoricalPropertyTaxRolls2.lot AS lot\
@@ -185,9 +186,121 @@ async function loadMissingNames(
   return result;
 }
 
-async function main(block: string, lot: string) {
-  const key = await getSecureKey();
+interface PropertyDocument {
+  PrimaryDocNumber: string;
+  DocumentDate: string;
+  FilingCode: string;
+  Names: string;
+  SecondaryDocNumber: string;
+  BookType: string;
+  BookNumber: string;
+  NumberOfPages: string;
+  Grantor: string;
+  TotalNamesCount: number;
+  NameInternalID: string;
+  DocumentId: string;
+  Grantee: string;
+  Block: string;
+  Lot: string;
+  APN: string;
+}
 
+async function checkTheVisibilityOfBatch(batch: ResultObject[][]) {
+  const randomIndex = Math.floor(Math.random() * batch.length);
+  const randomArray = batch[randomIndex];
+  const randomObjectIndex = Math.floor(Math.random() * randomArray.length);
+  console.log("first object of the batch:", batch[0][0]);
+  console.log("random object of the batch:", randomArray[randomObjectIndex]);
+}
+
+async function iterateThroughAllBlocksLots(block: string, lot: string) {
+  let completed = 0;
+  let count = 0;
+  let maxPropertyRecords = 100;
+
+  const db = await open({
+    filename: join(
+      fileURLToPath(import.meta.url),
+      "../../data/sfPropertyTaxRolls.sqlite"
+    ),
+    driver: sqlite3.Database,
+  });
+
+  while (count < maxPropertyRecords) {
+    const missingBlockAndLots = await loadMissingNames(block, lot, db, 5);
+
+    if (missingBlockAndLots.length === 0) {
+      break;
+    }
+
+    const key = await getSecureKey();
+    const batch = await Promise.all(
+      missingBlockAndLots.map(async ({ block, lot }) => {
+        const propertyRecords = await getTenLatestPropertyDocuments(
+          block,
+          lot,
+          key
+        );
+
+        return propertyRecords;
+      })
+    );
+
+    checkTheVisibilityOfBatch(batch);
+
+    // what is batch?
+    // batch is a group of 5 unique block lots's top 10 recent documents
+
+    for (const documentsOfOneBlockLot of batch) {
+      if (!documentsOfOneBlockLot) {
+        console.log(`No results for block`); // TODO: add metadata to take of [] empty case
+        continue;
+      }
+      await db.run("BEGIN TRANSACTION");
+      for (const document of documentsOfOneBlockLot) {
+        db.run(
+          `INSERT INTO PropertyDocuments (
+        PrimaryDocNumber,
+        DocumentDate,
+        FilingCode,
+        Names,
+        SecondaryDocNumber,
+        BookType,
+        BookNumber,
+        NumberOfPages,
+        Grantor,
+        TotalNamesCount,
+        NameInternalID,
+        DocumentId,
+        Grantee,
+        Block,
+        Lot,
+        APN
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+          Object.values(document)
+        );
+        // await db.run(`)
+      }
+      await db.run("COMMIT");
+    }
+
+    block = missingBlockAndLots[missingBlockAndLots.length - 1].block;
+    lot = missingBlockAndLots[missingBlockAndLots.length - 1].lot;
+    completed += missingBlockAndLots.length;
+    console.log(
+      `Completed ${completed} properties (block ${block}, lot ${lot}))`
+    );
+    console.log("completed missingblock and lots:", missingBlockAndLots);
+
+    count++;
+  }
+}
+
+async function getTenLatestPropertyDocuments(
+  block: string,
+  lot: string,
+  key: SecureKey
+) {
   const blockLotData = await getOneBlockLot(
     {
       block,
@@ -195,12 +308,10 @@ async function main(block: string, lot: string) {
     },
     key
   );
-
-  const documentIdsOfBlockLot = blockLotData.SearchResults.map(
-    (searchResult) => searchResult.ID
-  );
-
-  console.log(documentIdsOfBlockLot, "documentIdsOfBlockLot");
+  if (!blockLotData) {
+    console.log("no documents found~");
+    return [];
+  }
 
   const combinedResults: ResultObject[] = [];
 
@@ -236,6 +347,8 @@ async function main(block: string, lot: string) {
     const searchResult2 = {
       ...newSearchResultWithoutId,
       ...result,
+      Grantee: result.Grantee ? result.Grantee : "",
+      Grantor: result.Grantor ? result.Grantor : "",
       block,
       lot,
       APN: `${block}${lot}`,
@@ -244,11 +357,165 @@ async function main(block: string, lot: string) {
     combinedResults.push(searchResult2); // Add searchResult to the combinedResults array
   }
 
-  console.log(combinedResults);
+  return combinedResults;
+}
+
+async function main(block: string, lot: string) {
+  const key = await getSecureKey();
+
+  const blockLotData = await getOneBlockLot(
+    {
+      block,
+      lot,
+    },
+    key
+  );
+
+  const documentIdsOfBlockLot = blockLotData.SearchResults.map(
+    (searchResult) => searchResult.ID
+  );
+
+  // console.log(documentIdsOfBlockLot, "documentIdsOfBlockLot");
+
+  const combinedResults: ResultObject[] = [];
+
+  for (const searchResult of blockLotData.SearchResults) {
+    const namesOnDocument = await getNamesOnDocumentFromSearchResultId(
+      searchResult.ID,
+      key
+    );
+
+    const result = namesOnDocument.NamesForPagination.reduce(
+      (acc: ResultObject, obj: DataObject) => {
+        if (obj.NameTypeDesc === "Grantor") {
+          acc.Grantor = acc.Grantor
+            ? acc.Grantor + ", " + obj.Fullname
+            : obj.Fullname + "";
+        } else if (obj.NameTypeDesc === "Grantee") {
+          acc.Grantee = acc.Grantee
+            ? acc.Grantee + ", " + obj.Fullname
+            : obj.Fullname + "";
+        }
+
+        acc.TotalNamesCount = obj.TotalNamesCount;
+        acc.NameInternalID = obj.NameInternalID;
+        acc.DocumentId = searchResult.ID;
+
+        return acc;
+      },
+      {} as ResultObject
+    );
+
+    const { ID, ...newSearchResultWithoutId } = searchResult;
+
+    const searchResult2 = {
+      ...newSearchResultWithoutId,
+      ...result,
+      grantee: block,
+      lot,
+      APN: `${block}${lot}`,
+    }; // Spread result into searchResult
+
+    combinedResults.push(searchResult2); // Add searchResult to the combinedResults array
+  }
+
+  // console.log(combinedResults);
   // combinedResults is one Document
   // console.log("blockLotData", blockLotData);
 }
 
 // main("0001", "001");
 
-console.log(await loadMissingNames("0001", "001", db, 5));
+// console.log(await loadMissingNames("0001", "001", db, 5));
+
+// iterateThroughAllBlocks("0001", "001");
+
+async function main2() {
+  const key = await getSecureKey();
+  const tenLatestPropertyDocuments = await getTenLatestPropertyDocuments(
+    "0001",
+    "001",
+    key
+  );
+  // console.log(tenLatestPropertyDocuments);
+
+  for (const documents of tenLatestPropertyDocuments) {
+    if (!documents) {
+      console.log(`no documents`);
+      continue;
+    }
+    // test this insertion
+    const cursor1 = await db.run(
+      `INSERT INTO PropertyDocuments (
+    PrimaryDocNumber,
+    DocumentDate,
+    FilingCode,
+    Names,
+    SecondaryDocNumber,
+    BookType,
+    BookNumber,
+    NumberOfPages,
+    Grantor,
+    TotalNamesCount,
+    NameInternalID,
+    DocumentId,
+    Grantee,
+    Block,
+    Lot,
+    APN
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+      Object.values(documents)
+    );
+
+    const propertyDocumentId = cursor1.lastID;
+    console.log("propertyDocumentId", propertyDocumentId);
+
+    // 1. split up grantee and grantor and add them to the names database
+    // Split grantor and grantee strings by comma and trim whitespace
+    const grantorNames = documents.Grantor.split(",").map((name) =>
+      name.trim()
+    );
+    const granteeNames = documents.Grantee.split(",").map((name) =>
+      name.trim()
+    );
+
+    // Combine grantor and grantee arrays
+    const allPropertyOwnerNames = [...grantorNames, ...granteeNames];
+    // console.log(allPropertyOwnerNames, "allPropertyOwnerNames");
+
+    for (const ownerName of allPropertyOwnerNames) {
+      console.log(ownerName, "ownerName");
+      const cursor = await db.run(
+        `INSERT INTO PropertyOwners (
+        Name
+      ) VALUES (?)`,
+        ownerName
+      );
+      const ownerId = cursor.lastID;
+      console.log(ownerId, "ownerId");
+
+      // insert into a jointable
+      db.run(
+        `INSERT INTO document_owners (
+      document_id,
+      owner_id,
+      role
+    ) VALUES (?, ?, ?)`,
+        propertyDocumentId,
+        ownerId,
+        documents.Grantor.includes(ownerName) ? "grantor" : "grantee"
+      );
+    }
+
+    console.log("insert one document into database successful");
+    console.log("insert document_owerns_join table database successful");
+  }
+  console.log("inserted all documents into database successful");
+}
+
+async function main3() {
+  await iterateThroughAllBlocksLots("0001", "001");
+}
+
+// await main3();
+await main2();
