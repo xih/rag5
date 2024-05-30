@@ -16,6 +16,14 @@
 // 1. save specific owners to propertyOwners table
 // 2. save to document_owners table too
 
+// [5-28-2024]
+// 11. use https://github.com/luminati-io/proxy-scrape-nodejs?tab=readme-ov-file to proxy the cookies
+// 12. curl "https://recorder.sfgov.org" \
+// --proxy brd.superproxy.io:22225 \
+// --proxy-user brd-customer-hl_6d74fc42-zone-residential_proxy4:812qoxo6po44
+// 13. THE ABOVE CURL COMMAND WORKS
+// 14. but doing it with puppeteer doesn't work.
+
 import sqlite3 from "sqlite3";
 import { blockLotSearchResultsSchema } from "../schemas/blockLotSchema";
 import { accessorRecorderEncryptedKeySchema } from "../schemas/encryptedKeySchema";
@@ -23,11 +31,15 @@ import { NamesForPaginationSchema } from "../schemas/namesForPaginationSchema";
 import { open } from "sqlite";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import puppeteer from "puppeteer";
+import fetch from "node-fetch";
+import { HttpProxyAgent } from "http-proxy-agent";
+import axios from "axios";
 
 const userAgent =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
-const cookie =
-  "googtrans=/en/en; BIGipServerASR-102_recorder.sfgov.org_PRD_EXT_pool=2160622032.20480.0000; HideDetails=0";
+// const cookie =
+// "googtrans=/en/en; BIGipServerASR-102_recorder.sfgov.org_PRD_EXT_pool=2160622032.20480.0000; HideDetails=0";
 
 const db = await open({
   filename: join(
@@ -37,7 +49,122 @@ const db = await open({
   driver: sqlite3.Database,
 });
 
-async function getSecureKey() {
+async function getCookie() {
+  const proxyServer = "brd.superproxy.io:22225";
+  const username = "brd-customer-hl_c8eb54f7-zone-residential_proxy1";
+  const password = "i7mqpfyngau4";
+  const proxyAuth = `${username}:${password}`;
+
+  const browser = await puppeteer.launch({
+    headless: false,
+    // args: ["--proxy-server=http://localhost:8080"], getting Error: net::ERR_CERT_AUTHORITY_INVALID at https://recorder.sfgov.org/
+    args: [
+      `--proxy-server=${proxyServer}`,
+      // `--proxy-auth=${proxyAuth}`,
+      // "--no-sandbox",
+      // "--disable-setuid-sandbox",
+      // "--disable-dev-shm-usage",
+      // "--ignore-certificate-errors",
+    ],
+    defaultViewport: { width: 1280, height: 800 },
+    userDataDir: "./tmp",
+    // ignoreHTTPSErrors: true, // This helps with certificate errors
+  });
+
+  const page = await browser.newPage();
+
+  // Authenticate the proxy
+  await page.authenticate({
+    username: username,
+    password: password,
+  });
+
+  console.log("succesfully authenticated the proxy! :)");
+  await page.goto("https://google.com", { waitUntil: "networkidle2" });
+  // await page.goto("https://recorder.sfgov.org/", { waitUntil: "networkidle2" });
+  await page.screenshot({ path: "example.png" });
+
+  console.log("what is the error here?");
+
+  // Get the cookies from the page
+  const cookies = await page.cookies();
+
+  const cookie = `googtrans=/en/en; ${cookies[0].name}=${cookies[0].value}; HideDetails=0`;
+
+  await browser.close();
+  return cookie;
+}
+
+async function getCookieWithPuppeteer() {
+  const browser = await puppeteer.launch({
+    headless: true,
+    defaultViewport: { width: 1280, height: 800 },
+    userDataDir: "./tmp",
+  });
+
+  const page = await browser.newPage();
+
+  await page.goto("https://recorder.sfgov.org/", { waitUntil: "networkidle2" });
+
+  const cookies = await page.cookies();
+
+  const cookie = `googtrans=/en/en; ${cookies[0].name}=${cookies[0].value}; HideDetails=0`;
+
+  await browser.close();
+  return cookie;
+}
+
+async function getSecureKeyWithProxy(cookie: string) {
+  const proxyOptions = {
+    proxy: {
+      host: "brd.superproxy.io",
+      port: 22225,
+      auth: {
+        username: "brd-customer-hl_c8eb54f7-zone-residential_proxy1",
+        password: "i7mqpfyngau4",
+      },
+    },
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      Authorization: "Bearer",
+      Connection: "keep-alive",
+      Referer: "https://recorder.sfgov.org/",
+      "User-Agent": userAgent,
+      Cookie: cookie,
+    },
+  };
+
+  const headerOptions = {
+    Accept: "application/json, text/plain, */*",
+    Authorization: "Bearer",
+    Connection: "keep-alive",
+    Referer: "https://recorder.sfgov.org/",
+    "User-Agent": userAgent,
+    Cookie: cookie,
+  };
+
+  const url = `https://recorder.sfgov.org/SearchService/api/SearchConfiguration/GetSecureKey`;
+
+  try {
+    // connect to the target page
+    // and log the server response
+    const response = await axios.get(url, proxyOptions);
+
+    const data = await response.data;
+
+    console.log(data);
+    console.log(response.data, "~~~ response");
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+// const cookie = await getCookie();
+// console.log("1.... does it work??");
+// await getSecureKeyWithProxy(cookie);
+// console.log("does it work??");
+
+async function getSecureKey(cookie: string) {
   const res = await fetch(
     `https://recorder.sfgov.org/SearchService/api/SearchConfiguration/GetSecureKey`,
     {
@@ -54,6 +181,8 @@ async function getSecureKey() {
 
   const data = await res.json();
 
+  console.log("secure key", data);
+
   const secureKey = accessorRecorderEncryptedKeySchema.parse(data);
 
   return {
@@ -69,7 +198,8 @@ type SecureKey = {
 
 async function getOneBlockLot(
   { block, lot }: { block: string; lot: string },
-  secureKey: SecureKey
+  secureKey: SecureKey,
+  cookie: string
 ) {
   const res = await fetch(
     // `https://recorder.sfgov.org/SearchService/api/Search/GetSearchResults?APN=&Acres=&AddressLineOne=&AddressLineTwo=&AreaCode=&Block=${encodeURIComponent(
@@ -102,6 +232,8 @@ async function getOneBlockLot(
 
   const data = await res.json();
 
+  console.log("whats data", data);
+
   const blockLotData = blockLotSearchResultsSchema.parse(data);
 
   console.log("number of documents:", blockLotData.SearchResults.length);
@@ -112,7 +244,8 @@ async function getOneBlockLot(
 
 async function getNamesOnDocumentFromSearchResultId(
   searchResultId: string,
-  secureKey: SecureKey
+  secureKey: SecureKey,
+  cookie: string
 ) {
   const res = await fetch(
     `https://recorder.sfgov.org/SearchService/api/search/GetNamesForPagination/${encodeURIComponent(
@@ -133,6 +266,8 @@ async function getNamesOnDocumentFromSearchResultId(
   );
 
   const data = await res.json();
+
+  console.log("NamesForPaginationSchema data", data);
 
   const namesOnDocument = NamesForPaginationSchema.parse(data);
 
@@ -216,7 +351,7 @@ async function checkTheVisibilityOfBatch(batch: ResultObject[][]) {
 async function iterateThroughAllBlocksLots(block: string, lot: string) {
   let completed = 0;
   let count = 0;
-  let maxPropertyRecords = 100;
+  let maxPropertyRecords = 100000;
 
   const db = await open({
     filename: join(
@@ -233,13 +368,19 @@ async function iterateThroughAllBlocksLots(block: string, lot: string) {
       break;
     }
 
-    const key = await getSecureKey();
+    // const cookie = await getCookie();
+    const cookie = await getCookieWithPuppeteer();
+
+    console.log(cookie, "!!!!!__cookie");
+
+    const key = await getSecureKey(cookie);
     const batch = await Promise.all(
       missingBlockAndLots.map(async ({ block, lot }) => {
         const propertyRecords = await getTenLatestPropertyDocuments(
           block,
           lot,
-          key
+          key,
+          cookie
         );
 
         return propertyRecords;
@@ -248,7 +389,6 @@ async function iterateThroughAllBlocksLots(block: string, lot: string) {
 
     checkTheVisibilityOfBatch(batch);
 
-    // what is batch?
     // batch is a group of 5 unique block lots's top 10 recent documents
 
     for (const documentsOfOneBlockLot of batch) {
@@ -258,7 +398,7 @@ async function iterateThroughAllBlocksLots(block: string, lot: string) {
       }
       await db.run("BEGIN TRANSACTION");
       for (const document of documentsOfOneBlockLot) {
-        db.run(
+        const cursor1 = await db.run(
           `INSERT INTO PropertyDocuments (
         PrimaryDocNumber,
         DocumentDate,
@@ -276,37 +416,70 @@ async function iterateThroughAllBlocksLots(block: string, lot: string) {
         Block,
         Lot,
         APN
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
           Object.values(document)
         );
-        // await db.run(`)
+        const propertyDocumentId = cursor1.lastID;
+
+        const grantorNames = document.Grantor.split(",").map((name) =>
+          name.trim()
+        );
+        const granteeNames = document.Grantee.split(",").map((name) =>
+          name.trim()
+        );
+
+        // Combine grantor and grantee arrays
+        const allPropertyOwnerNames = [...grantorNames, ...granteeNames];
+
+        for (const ownerName of allPropertyOwnerNames) {
+          const cursor = await db.run(
+            `INSERT INTO PropertyOwners (
+            Name
+            ) VALUES (?)`,
+            ownerName
+          );
+          const ownerId = cursor.lastID;
+
+          // insert into a jointable
+          db.run(
+            `INSERT INTO document_owners (
+              document_id,
+              owner_id,
+              role
+            ) VALUES (?, ?, ?)`,
+            propertyDocumentId,
+            ownerId,
+            document.Grantor.includes(ownerName) ? "grantor" : "grantee"
+          );
+        }
       }
       await db.run("COMMIT");
+
+      block = missingBlockAndLots[missingBlockAndLots.length - 1].block;
+      lot = missingBlockAndLots[missingBlockAndLots.length - 1].lot;
+      completed += missingBlockAndLots.length;
+      console.log(
+        `Completed ${completed} properties (block ${block}, lot ${lot}))`
+      );
+      console.log("completed missingblock and lots:", missingBlockAndLots);
+      count++;
     }
-
-    block = missingBlockAndLots[missingBlockAndLots.length - 1].block;
-    lot = missingBlockAndLots[missingBlockAndLots.length - 1].lot;
-    completed += missingBlockAndLots.length;
-    console.log(
-      `Completed ${completed} properties (block ${block}, lot ${lot}))`
-    );
-    console.log("completed missingblock and lots:", missingBlockAndLots);
-
-    count++;
   }
 }
 
 async function getTenLatestPropertyDocuments(
   block: string,
   lot: string,
-  key: SecureKey
+  key: SecureKey,
+  cookie: string
 ) {
   const blockLotData = await getOneBlockLot(
     {
       block,
       lot,
     },
-    key
+    key,
+    cookie
   );
   if (!blockLotData) {
     console.log("no documents found~");
@@ -318,7 +491,8 @@ async function getTenLatestPropertyDocuments(
   for (const searchResult of blockLotData.SearchResults) {
     const namesOnDocument = await getNamesOnDocumentFromSearchResultId(
       searchResult.ID,
-      key
+      key,
+      cookie
     );
 
     const result = namesOnDocument.NamesForPagination.reduce(
@@ -361,14 +535,17 @@ async function getTenLatestPropertyDocuments(
 }
 
 async function main(block: string, lot: string) {
-  const key = await getSecureKey();
+  const cookie = await getCookie();
+
+  const key = await getSecureKey(cookie);
 
   const blockLotData = await getOneBlockLot(
     {
       block,
       lot,
     },
-    key
+    key,
+    cookie
   );
 
   const documentIdsOfBlockLot = blockLotData.SearchResults.map(
@@ -382,7 +559,8 @@ async function main(block: string, lot: string) {
   for (const searchResult of blockLotData.SearchResults) {
     const namesOnDocument = await getNamesOnDocumentFromSearchResultId(
       searchResult.ID,
-      key
+      key,
+      cookie
     );
 
     const result = namesOnDocument.NamesForPagination.reduce(
@@ -424,18 +602,15 @@ async function main(block: string, lot: string) {
   // console.log("blockLotData", blockLotData);
 }
 
-// main("0001", "001");
-
-// console.log(await loadMissingNames("0001", "001", db, 5));
-
-// iterateThroughAllBlocks("0001", "001");
-
 async function main2() {
-  const key = await getSecureKey();
+  const cookie = await getCookie();
+
+  const key = await getSecureKey(cookie);
   const tenLatestPropertyDocuments = await getTenLatestPropertyDocuments(
     "0001",
     "001",
-    key
+    key,
+    cookie
   );
   // console.log(tenLatestPropertyDocuments);
 
@@ -481,7 +656,6 @@ async function main2() {
 
     // Combine grantor and grantee arrays
     const allPropertyOwnerNames = [...grantorNames, ...granteeNames];
-    // console.log(allPropertyOwnerNames, "allPropertyOwnerNames");
 
     for (const ownerName of allPropertyOwnerNames) {
       console.log(ownerName, "ownerName");
@@ -517,5 +691,5 @@ async function main3() {
   await iterateThroughAllBlocksLots("0001", "001");
 }
 
-// await main3();
-await main2();
+await main3();
+// await main2();

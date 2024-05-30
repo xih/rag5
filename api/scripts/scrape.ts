@@ -526,68 +526,8 @@ async function processAllBlockAndLots(block = "", lot = "") {
     );
 
     count++;
-    // console.log("increment count");
-
-    // console.log(
-    //   `Completed ${completed} properties (block ${block}, lot ${lot}))`
-    // );
   }
 }
-
-// Refernce
-// async function getNames(block: string, lot: string, key: QueryKey) {
-//   const result = await getFirstResult({ block, lot }, key);
-//   if (!result) return [];
-//   const names = await getNamesForResult(result.id, key);
-//   return names;
-// }
-
-// Reference:
-
-// async function main(block = "", lot = "") {
-//   let completed = 0;
-// while (true) {
-//   const missing = await loadMissingNames(block, lot, 5);
-//   if (missing.length === 0) break;
-
-//   const key = await getKey();
-//   const batch = await Promise.all(
-//     missing.map(async ({ block, lot }) => {
-//       const names = await getNames(block, lot, key);
-//       return { block, lot, names };
-//     })
-//   );
-
-//   for (const { block, lot, names } of batch) {
-//     if (names.length === 0) {
-//       console.log(`No results for block ${block} and lot ${lot}`);
-//       continue;
-//     }
-
-//     await db.run("BEGIN TRANSACTION");
-//     for (const name of names) {
-//       await db.run(
-//         // add a created timestamp as a row to the table to have metadata on when we creeated it
-//         // make an index off the (block, lot, type name), then insert new ones. if conflict on index do nothing
-//         "INSERT INTO property_names (block, lot, type, name, id, created_at) VALUES (?, ?, ?, ?, ?, NOW())",
-//         block,
-//         lot,
-//         name.type,
-//         name.name,
-//         name.id
-//       );
-//     }
-//     await db.run("COMMIT");
-//   }
-
-//   block = missing[missing.length - 1].block;
-//   lot = missing[missing.length - 1].lot;
-//   completed += missing.length;
-//   console.log(
-//     `Completed ${completed} properties (block ${block}, lot ${lot}))`
-//   );
-// }
-// }
 
 async function main2() {
   // const key = await getSecureKey();
