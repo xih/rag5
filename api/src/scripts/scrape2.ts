@@ -25,9 +25,9 @@
 // 14. but doing it with puppeteer doesn't work.
 
 import sqlite3 from "sqlite3";
-import { blockLotSearchResultsSchema } from "../schemas/blockLotSchema";
-import { accessorRecorderEncryptedKeySchema } from "../schemas/encryptedKeySchema";
-import { NamesForPaginationSchema } from "../schemas/namesForPaginationSchema";
+import { blockLotSearchResultsSchema } from "../../schemas/blockLotSchema.js";
+import { accessorRecorderEncryptedKeySchema } from "../../schemas/encryptedKeySchema.js";
+import { NamesForPaginationSchema } from "../../schemas/namesForPaginationSchema.js";
 import { open } from "sqlite";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";

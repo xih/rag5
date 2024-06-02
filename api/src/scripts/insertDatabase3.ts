@@ -1,6 +1,5 @@
 // [5-16-2024] make a new talbe in sfPropertyTaxRolls  that is all searchResultNames
 // with a foreignkey that is linked to the propertyTaxRolls database by ID and block/lot number
-//
 
 import { fileURLToPath } from "node:url";
 import sqlite3 from "sqlite3";

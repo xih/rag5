@@ -37,7 +37,7 @@
 // and merge all the different rows together so that there would just be one row for a grantor and grantee
 
 import z from "zod";
-import { blockLotSearchResultsSchema } from "../schemas/blockLotSchema";
+import { blockLotSearchResultsSchema } from "../../schemas/blockLotSchema.js";
 import _ from "underscore";
 // import writeJSONtoFile from "fs/promises";
 import { writeFile } from "fs/promises";
@@ -45,7 +45,7 @@ import { fileURLToPath } from "node:url";
 import sqlite3 from "sqlite3";
 import { join } from "node:path";
 import { open } from "sqlite";
-import { NamesForPaginationSchema } from "../schemas/namesForPaginationSchema";
+import { NamesForPaginationSchema } from "../../schemas/namesForPaginationSchema.js";
 
 const userAgent = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36`;
 const cookie = `googtrans=/en/en; BIGipServerASR-102_recorder.sfgov.org_PRD_EXT_pool=2160622032.20480.0000; HideDetails=0`;
