@@ -5,7 +5,7 @@ const createDatabase = async () => {
   const client = new Client({
     user: "dennis",
     host: "localhost",
-    password: "LTvtAa.s8VyYbxAA-ik2",
+    password: process.env.LOCAL_POSTGRES_PASSWORD,
     port: 5432,
   });
 
@@ -28,7 +28,7 @@ const createTable = async () => {
   const client = new Client({
     user: "dennis",
     host: "localhost",
-    password: "LTvtAa.s8VyYbxAA-ik2",
+    password: process.env.LOCAL_POSTGRES_PASSWORD,
     database: "property_documents_db",
     port: 5432,
   });
