@@ -6,12 +6,15 @@ import { createClient } from "@supabase/supabase-js";
 import { Database } from "@/generated/db";
 import { PickingInfo } from "@deck.gl/core";
 import { MjolnirEvent } from "mjolnir.js";
+import { SheetDemo } from "./Sheet";
 
 const supabaseUrl = "https://dimmbajebuxcomgzbzrj.supabase.co"; // Your Supabase Project URL
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!; // Your Supabase Key
 
-// problem: all latitude and longitudes are null
-// skill issue - data problem.
+// todo - click on dot and get shadcn sheet displayed
+// [6-13-2024] -
+// 1. make it so that the sheet doesn't open up twice when the dot is selected
+// 2. display the data from the dot in the sheet
 
 // Create a single supabase client for interacting with your database
 const supabase = createClient<Database>(supabaseUrl, supabaseKey);
@@ -108,6 +111,19 @@ const MapComponent = () => {
     zoom: 8,
   });
 
+  const [isSheetOpen, setSheetOpen] = useState(false);
+  const [selectedDataPoint, setSelectedDataPoint] =
+    useState<Datatype2 | null>();
+
+  const onClick2 = useCallback(
+    (info: PickingInfo<any>, event: MjolnirEvent) => {
+      setSheetOpen(true);
+      setSelectedDataPoint(info.object as Datatype2);
+      console.log("Clicked:", info, event);
+    },
+    []
+  );
+
   // Callback to populate the default tooltip with content
   const getTooltip = useCallback(({ object }: PickingInfo<Datatype2>) => {
     if (object) {
@@ -127,6 +143,10 @@ const MapComponent = () => {
 
   const { data: data2 } = useIncrementalData();
 
+  const onClick = useCallback((info: PickingInfo, event: MjolnirEvent) => {
+    console.log("Clicked:", info, event);
+  }, []);
+
   const scatterplotLayer = new ScatterplotLayer({
     id: "scatterplot-layer",
     data: data2,
@@ -134,11 +154,25 @@ const MapComponent = () => {
     getRadius: (d) => 15,
     getColor: (d) => [255, 140, 0],
     pickable: true,
+    // highlightColor: [0, 0, 128, 128],
+    autoHighlight: true,
     // onHover: (info: PickingInfo<DataType>, event: MjolnirEvent) =>
     //   console.log("Hovered:", info, event),
+    onClick: onClick2,
   });
 
-  console.log(scatterplotLayer, "scatterplotLayer");
+  // console.log(scatterplotLayer, "scatterplotLayer");
+
+  const onClickBesidesScatterPlotLayer = useCallback(
+    (info: PickingInfo, event: MjolnirEvent) => {
+      console.log("Clicked:", info, event);
+      if (!info.layer) {
+        console.log("no layer clicked");
+        setSelectedDataPoint(null);
+      }
+    },
+    []
+  );
 
   return (
     <DeckGL
@@ -152,7 +186,14 @@ const MapComponent = () => {
       controller={{ touchRotate: true, inertia: 250 }}
       layers={[scatterplotLayer]}
       getTooltip={getTooltip}
+      onClick={onClickBesidesScatterPlotLayer}
     >
+      <SheetDemo
+        isSheetOpen={!!selectedDataPoint}
+        // onClose={() => {
+        //   setSheetOpen(false);
+        // }}
+      />
       <Map
         mapboxAccessToken={process.env.NEXT_PUBLIC_REACT_APP_MAPBOX_TOKEN}
         mapStyle="mapbox://styles/mapbox/light-v11"
