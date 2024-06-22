@@ -19,28 +19,52 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Fragment } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { CardWithForm } from "./EditCard";
+import useItemEditStore from "@/stores/useItemEditStore";
+import { Card } from "@/components/ui/card";
 
 // Define the reusable function
-const renderFormattedItems = (
+const RenderFormattedItems = (
   items: string[],
   handleEdit: () => void,
-  handleRevert: () => void
+  handleRevert: () => void,
+  type: "grantor" | "grantee"
 ) => {
+  const { granteeEditIndex, grantorEditIndex } = useItemEditStore();
+
   if (items.length === 0) {
     return <div className="text-sm">No Owner</div>;
   } else if (items.length === 1 && items[0] === "") {
     return <div className="text-sm">No Owner</div>;
   }
-  return items.map((item, index) => (
-    <div key={index} className="mb-1 justify-between flex items-center">
-      <div className="flex text-sm">{item}</div>
-      <DropdownMenuComponent
-        fullName={item}
-        onEdit={handleEdit}
-        onRevert={handleRevert}
-      />
-    </div>
-  ));
+  {
+    console.log(items);
+  }
+  return items.map((item, index) => {
+    const currentEditIndex =
+      type === "grantee" ? granteeEditIndex : grantorEditIndex;
+
+    return (
+      <div key={index}>
+        <div className="mb-1 justify-between flex items-center">
+          {index === currentEditIndex ? (
+            <CardWithForm initialName={item} type={type} />
+          ) : (
+            <>
+              <div className="flex text-sm">{item}</div>
+              <DropdownMenuComponent
+                index={index}
+                fullName={item}
+                onEdit={handleEdit}
+                onRevert={handleRevert}
+                type={type}
+              />
+            </>
+          )}
+        </div>
+      </div>
+    );
+  });
 };
 
 export function SheetDemo({
@@ -108,8 +132,14 @@ export function SheetDemo({
     setEditMode(false);
   };
 
+  const { resetEditIndices } = useItemEditStore();
+
+  const handleClose = () => {
+    resetEditIndices();
+  };
+
   return (
-    <Sheet open={isSheetOpen} modal={false}>
+    <Sheet open={isSheetOpen} modal={false} onOpenChange={handleClose}>
       <SheetContent className="p-0">
         <ScrollArea className="h-[100vh] w-full p-6">
           <SheetHeader>
@@ -128,10 +158,11 @@ export function SheetDemo({
                 Current Owner
               </Label>
               <div className="col-span-4">
-                {renderFormattedItems(
+                {RenderFormattedItems(
                   granteeSplitFormated,
                   handleEdit,
-                  handleRevert
+                  handleRevert,
+                  "grantee"
                 )}
               </div>
             </div>
@@ -144,10 +175,11 @@ export function SheetDemo({
               </Label>
               {/* <Input id="name" value="Pedro Duarte" className="col-span-3" /> */}
               <div className="col-span-4">
-                {renderFormattedItems(
+                {RenderFormattedItems(
                   grantorSplitFormated,
                   handleEdit,
-                  handleRevert
+                  handleRevert,
+                  "grantor"
                 )}
               </div>
             </div>

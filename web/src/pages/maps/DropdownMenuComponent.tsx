@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { ChevronRightIcon } from "@radix-ui/react-icons";
+import useItemEditStore from "@/stores/useItemEditStore";
 
 // 2 buttons
 // 1. do a google search for the person
@@ -36,12 +37,25 @@ interface DropdownMenuComponentProps {
 
 export default function DropdownMenuComponent<DropdownMenuComponentProps>({
   fullName,
+  onEdit,
+  onRevert,
+  index,
+  type,
 }: // actions,
 {
   fullName: string;
   onEdit: () => void;
   onRevert: () => void;
+  index: number;
+  type: "grantor" | "grantee";
 }) {
+  const {
+    setGranteeEditIndex,
+    setGrantorEditIndex,
+    granteeEditIndex,
+    grantorEditIndex,
+  } = useItemEditStore();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -94,15 +108,28 @@ export default function DropdownMenuComponent<DropdownMenuComponentProps>({
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {/* {actions.map((item, index) => (
-            <DropdownMenuItem key={index} onSelect={item.action}>
-              {item.label}
-            </DropdownMenuItem>
-          ))} */}
-          {/* <DropdownMenuItem onSelect={onEdit}>Edit</DropdownMenuItem>
-          <DropdownMenuItem onSelect={onRevert}>
-            Revert to Original
-          </DropdownMenuItem> */}
+          <DropdownMenuItem
+            onSelect={() => {
+              if (type === "grantee") {
+                setGranteeEditIndex(index);
+              } else {
+                setGrantorEditIndex(index);
+              }
+            }}
+          >
+            Edit name
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              if (type === "grantee") {
+                setGranteeEditIndex(null);
+              } else {
+                setGrantorEditIndex(null);
+              }
+            }}
+          >
+            Revert name to original
+          </DropdownMenuItem>
           <DropdownMenuItem>Team</DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
