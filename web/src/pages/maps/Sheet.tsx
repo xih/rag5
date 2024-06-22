@@ -22,6 +22,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { CardWithForm } from "./EditCard";
 import useItemEditStore from "@/stores/useItemEditStore";
 import { Card } from "@/components/ui/card";
+import { useEditStore } from "@/stores/useItemEditStore";
 
 // Define the reusable function
 const RenderFormattedItems = (
@@ -48,7 +49,11 @@ const RenderFormattedItems = (
       <div key={index}>
         <div className="mb-1 justify-between flex items-center">
           {index === currentEditIndex ? (
-            <CardWithForm initialName={item} type={type} />
+            <CardWithForm
+              initialName={item}
+              type={type}
+              editIndex={currentEditIndex}
+            />
           ) : (
             <>
               <div className="flex text-sm">{item}</div>
@@ -138,6 +143,42 @@ export function SheetDemo({
     resetEditIndices();
   };
 
+  const {
+    initializeGrantorNames,
+    initializeGranteeNames,
+    grantorNames,
+    granteeNames,
+    initializeOriginalGrantorNames,
+    initializeOriginalGranteeNames,
+    originalGrantorNames,
+    originalGranteeNames,
+  } = useEditStore();
+
+  // initialize the original names to use for later
+  useEffect(() => {
+    const grantorSplit = grantor.split(",");
+    const granteeSplit = grantee.split(",");
+
+    const grantorSplitFormated = grantorSplit.map((item) =>
+      changeCase.capitalCase(item)
+    );
+    const granteeSplitFormated = granteeSplit.map((item) =>
+      changeCase.capitalCase(item)
+    );
+
+    initializeGrantorNames(grantorSplitFormated);
+    initializeGranteeNames(granteeSplitFormated);
+    initializeOriginalGrantorNames(grantorSplitFormated);
+    initializeOriginalGranteeNames(granteeSplitFormated);
+  }, [
+    grantee,
+    grantor,
+    initializeGranteeNames,
+    initializeGrantorNames,
+    initializeOriginalGranteeNames,
+    initializeOriginalGrantorNames,
+  ]);
+
   return (
     <Sheet open={isSheetOpen} modal={false} onOpenChange={handleClose}>
       <SheetContent className="p-0">
@@ -159,7 +200,7 @@ export function SheetDemo({
               </Label>
               <div className="col-span-4">
                 {RenderFormattedItems(
-                  granteeSplitFormated,
+                  granteeNames,
                   handleEdit,
                   handleRevert,
                   "grantee"
@@ -176,7 +217,7 @@ export function SheetDemo({
               {/* <Input id="name" value="Pedro Duarte" className="col-span-3" /> */}
               <div className="col-span-4">
                 {RenderFormattedItems(
-                  grantorSplitFormated,
+                  grantorNames,
                   handleEdit,
                   handleRevert,
                   "grantor"

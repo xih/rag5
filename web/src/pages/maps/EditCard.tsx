@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import useItemEditStore from "@/stores/useItemEditStore";
+import useItemEditStore, { useEditStore } from "@/stores/useItemEditStore";
 
 export function CardWithForm({
   initialName,
@@ -26,14 +26,16 @@ export function CardWithForm({
   // onSave,
   // onCancel,
   type,
+  editIndex,
 }: {
   initialName: string;
   // onNameChange: (name: string) => void;
   // onSave: () => void;
   // onCancel: () => void;
   type: "grantee" | "grantor";
+  editIndex: number;
 }) {
-  const [name, setName] = useState(initialName);
+  const [editedName, setEditedName] = useState(initialName);
 
   const {
     granteeEditIndex,
@@ -43,7 +45,7 @@ export function CardWithForm({
   } = useItemEditStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
+    setEditedName(e.target.value);
     // onNameChange(e.target.value);
   };
 
@@ -54,6 +56,25 @@ export function CardWithForm({
       setGrantorEditIndex(null);
     }
   };
+
+  const onSave = () => {
+    if (type === "grantee") {
+      setGranteeName(editIndex, editedName);
+      setGranteeEditIndex(null);
+    } else {
+      setGrantorName(editIndex, editedName);
+      setGrantorEditIndex(null);
+    }
+  };
+
+  const {
+    grantorNames,
+    granteeNames,
+    setGrantorName,
+    setGranteeName,
+    revertGrantorName,
+    revertGranteeName,
+  } = useEditStore();
 
   return (
     <Card className="w-full">
@@ -68,8 +89,8 @@ export function CardWithForm({
               <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
-                placeholder={`${name}`}
-                value={name}
+                placeholder={`${editedName}`}
+                value={editedName}
                 onChange={handleChange}
               />
             </div>
@@ -94,7 +115,7 @@ export function CardWithForm({
         <Button variant="outline" onClick={onCancel}>
           Cancel
         </Button>
-        <Button>Save</Button>
+        <Button onClick={onSave}>Save</Button>
       </CardFooter>
     </Card>
   );
