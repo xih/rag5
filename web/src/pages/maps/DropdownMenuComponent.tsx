@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { ChevronRightIcon } from "@radix-ui/react-icons";
-import useItemEditStore from "@/stores/useItemEditStore";
+import useItemEditStore, { useEditStore } from "@/stores/useItemEditStore";
 
 // 2 buttons
 // 1. do a google search for the person
@@ -55,6 +55,13 @@ export default function DropdownMenuComponent<DropdownMenuComponentProps>({
     granteeEditIndex,
     grantorEditIndex,
   } = useItemEditStore();
+
+  const {
+    setGranteeName,
+    setGrantorName,
+    originalGranteeNames,
+    originalGrantorNames,
+  } = useEditStore();
 
   return (
     <DropdownMenu>
@@ -122,9 +129,9 @@ export default function DropdownMenuComponent<DropdownMenuComponentProps>({
           <DropdownMenuItem
             onSelect={() => {
               if (type === "grantee") {
-                setGranteeEditIndex(null);
+                setGranteeName(index, originalGranteeNames[index]);
               } else {
-                setGrantorEditIndex(null);
+                setGrantorName(index, originalGrantorNames[index]);
               }
             }}
           >

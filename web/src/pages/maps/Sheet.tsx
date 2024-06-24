@@ -23,6 +23,12 @@ import { CardWithForm } from "./EditCard";
 import useItemEditStore from "@/stores/useItemEditStore";
 import { Card } from "@/components/ui/card";
 import { useEditStore } from "@/stores/useItemEditStore";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Define the reusable function
 const RenderFormattedItems = (
@@ -32,6 +38,7 @@ const RenderFormattedItems = (
   type: "grantor" | "grantee"
 ) => {
   const { granteeEditIndex, grantorEditIndex } = useItemEditStore();
+  const { originalGrantorNames, originalGranteeNames } = useEditStore();
 
   if (items.length === 0) {
     return <div className="text-sm">No Owner</div>;
@@ -45,6 +52,16 @@ const RenderFormattedItems = (
     const currentEditIndex =
       type === "grantee" ? granteeEditIndex : grantorEditIndex;
 
+    let isEdited;
+
+    if (type === "grantor") {
+      isEdited = item !== originalGrantorNames[index];
+    } else {
+      isEdited = item !== originalGranteeNames[index];
+    }
+
+    const textStyle = isEdited ? `text-cyan-700	` : ``;
+
     return (
       <div key={index}>
         <div className="mb-1 justify-between flex items-center">
@@ -56,7 +73,20 @@ const RenderFormattedItems = (
             />
           ) : (
             <>
-              <div className="flex text-sm">{item}</div>
+              {isEdited ? (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <div className={`flex text-sm ${textStyle}`}>{item}</div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>edited. revert in dropdown menu</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ) : (
+                <div className={`flex text-sm ${textStyle}`}>{item}</div>
+              )}
               <DropdownMenuComponent
                 index={index}
                 fullName={item}
