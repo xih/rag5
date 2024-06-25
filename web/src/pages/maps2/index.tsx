@@ -7,9 +7,10 @@ import { createClient } from "@supabase/supabase-js";
 import { Database } from "@/generated/db";
 import { PickingInfo } from "@deck.gl/core";
 import { MjolnirEvent } from "mjolnir.js";
-// import { useNavigate, useLocation } from "react-router-dom";
 import { useRouter } from "next/router";
 import { FeatureCollection, Geometry } from "geojson";
+import useParcelStore from "@/stores/useParcelStore";
+import ParcelDetailSheet from "./ParcelDetailSheet";
 
 const supabaseUrl = "https://dimmbajebuxcomgzbzrj.supabase.co"; // Your Supabase Project URL
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!; // Your Supabase Key
@@ -61,6 +62,8 @@ const DarkModeMapComponent = () => {
   const [page, setPage] = useState(0);
   const PAGE_SIZE = 10000;
   const [selectedFeature, setSelectedFeature] = useState<NullableFeature>(null);
+  const selectedBlklot = useParcelStore((state) => state.selectedBlklot);
+  const setSelectedBlklot = useParcelStore((state) => state.setSelectedBlklot);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,13 +104,10 @@ const DarkModeMapComponent = () => {
         await new Promise((res) => setTimeout(res, 1000)); // Delay to prevent rate limiting
         offset += batchLimit;
       }
-      // console.log(offset, "offset");
     };
 
     fetchData();
   }, []);
-
-  // console.log(data, "data");
 
   type ParcelProperties = Database["public"]["Tables"]["parcels"]["Row"];
 
@@ -186,11 +186,26 @@ const DarkModeMapComponent = () => {
       console.log(object, "clicked!!");
       console.log(selectedFeature, "selectedFeature");
       setSelectedFeature(object);
+      if (object && object.properties) {
+        setSelectedBlklot(object.properties.blklot);
+      }
     },
     updateTriggers: {
       getFillColor: [selectedFeature],
     },
   });
+
+  const onClickBesidesGeoJSON = useCallback(
+    (info: PickingInfo<ParcelRow>, event: MjolnirEvent) => {
+      if (info.object) {
+        // setSelectedBlklot(info.object.blklot);
+      } else {
+        setSelectedBlklot(null);
+        setSelectedFeature(null);
+      }
+    },
+    [setSelectedBlklot, setSelectedFeature]
+  );
 
   return (
     <DeckGL
@@ -204,11 +219,16 @@ const DarkModeMapComponent = () => {
       controller={{ touchRotate: true, inertia: 250 }}
       layers={[layer]}
       getTooltip={getTooltip}
-      // onClick={onClickHandler}
+      onClick={onClickBesidesGeoJSON}
     >
       <Map
         mapboxAccessToken={process.env.NEXT_PUBLIC_REACT_APP_MAPBOX_TOKEN}
         mapStyle="mapbox://styles/mapbox/dark-v10"
+      />
+      <ParcelDetailSheet
+        isSheetOpen={!!selectedBlklot}
+        blklot={selectedBlklot}
+        onClose={() => setSelectedBlklot(null)}
       />
     </DeckGL>
   );
